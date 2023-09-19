@@ -52,23 +52,23 @@
             <label for="active">Status:</label>
             <div>
                 <?php
-                if (isset($detail[0]['role_type']))
-                    if ($detail[0]['role_type'] == 1) {
-                        echo '<label class="radio-inline">
-                                <input checked="" type="radio" name="active" value="1">Super Admin
-                                </label>
-                                    <label class="radio-inline">
-                                 <input type="radio" name="active" value="2">Admin
-                                 </label>';
-                    } else if ($detail[0]['role_type'] == 2) {
-                        echo '<label class="radio-inline">
-                                        <input type="radio" name="active" value="1">Super Admin 
-                                      </label>
-                                            <label class="radio-inline">
-                                        <input checked="" type="radio" name="active" value="2">Admin
-                                        </label>';
-                    }
+                $superAdminChecked = (isset($detail[0]['role_type']) && $detail[0]['role_type'] == 1) ? 'checked' : '';
+                $adminChecked = (isset($detail[0]['role_type']) && $detail[0]['role_type'] == 2) ? 'checked' : '';
+
+                if (isset($valid['role_type']) && $valid['role_type'] == 1) {
+                    $superAdminChecked = 'checked';
+                }
+                if (isset($valid['role_type']) && $valid['role_type'] == 2) {
+                    $adminChecked = 'checked';
+                }
                 ?>
+
+                <label class="radio-inline">
+                    <input <?= $superAdminChecked ?> type="radio" name="role_type" value="1">Super Admin
+                </label>
+                <label class="radio-inline">
+                    <input <?= $adminChecked ?> type="radio" name="role_type" value="2">Admin
+                </label>
             </div>
         </div>
         <button type="reset" name = 'reset'class="btn btn-secondary">Reset</button>

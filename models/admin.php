@@ -120,7 +120,7 @@ class Admin {
         $stmt->bindParam(':email', $admin['email'], PDO::PARAM_STR);
         $stmt->bindParam(':password', $pass, PDO::PARAM_STR);
         $stmt->bindParam(':avatar', $admin['avatar'], PDO::PARAM_STR);
-        $stmt->bindParam(':role_type', $admin['active'], PDO::PARAM_INT);
+        $stmt->bindParam(':role_type', $admin['role_type'], PDO::PARAM_INT);
         $stmt->bindParam(':id', $admin['id'], PDO::PARAM_INT);
         if ($stmt->execute()) {
             return true;

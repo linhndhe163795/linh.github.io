@@ -6,6 +6,9 @@ require_once 'helper/common.php';
 require_once 'helper/validation.php';
 session_start();
 
+define('SUPER_ADMIN', 1);
+define('ADMIN', 2);
+
 class CreateController extends BaseController {
 
     function __construct() {
@@ -17,14 +20,13 @@ class CreateController extends BaseController {
     }
 
     public function createAdmin() {
-        if (isset($_SESSION['role_type']) && ($_SESSION['role_type']) == 1) {
+        if (isset($_SESSION['role_type']) && ($_SESSION['role_type']) == SUPER_ADMIN) {
             if (isset($_POST['submit'])) {
                 $avatar = $_FILES['avatar']['name'];
                 $_POST['avatar'] = $avatar;
-
                 // step 1 @validate
-                $validate = Validation::validateCreateAdmin($_POST);
-//                dd($_POST);   
+                $validate = Validation::validateInput($_POST);
+//                dd($_POST);
                 // step 2 @ok => save / @fail => show errors
                 if ($validate['status']) {
                     Admin::createNewAccount($_POST);
@@ -36,7 +38,6 @@ class CreateController extends BaseController {
                         'errors' => $validate['messages'],
                         'valid' => $validate['valid']
                     ]);
-//                    dd($validate['valid']);
                 }
             } else {
                 $this->render("create");

@@ -59,15 +59,15 @@ include 'header.php';
                     echo '<td>' . $row['name'] . '</td>';
                     echo '<td>' . $row['email'] . '</td>';
                     echo '<td>' . $row['password'] . '</td>';
-                    if ($row['role_type'] == 1)
+                    if ($row['role_type'] === '1')
                         echo '<td> Super Admin </td>';
-                    if ($row['role_type'] == 2)
+                    if ($row['role_type'] === '2')
                         echo '<td> Admin </td>';
                     echo '<td><img alt="123" style="max-height: 100px; max-width: 100px" src="/views/pages/media/' . $row['avatar'] . '"></td>';
                     echo '<td><a href="index.php?controller=edit&action=edit&id=' . $row['id'] . '"><button class="btn btn-success">Edit</button></a>';
                     echo
                     '<form id="delete" action="index.php?controller=edit&action=delete&id=' . $row['id'] . '" method="POST">' .
-                    '<input type="hidden" name="deleteaccount" id="deleteId" value="' . $row['id'] . '"/>' .
+                    '<input type="hidden" name="delete_account" id="deleteId" value="' . $row['id'] . '"/>' .
                     '<input type="hidden" name="del_flag"  value="' . $row['del_flag'] . '"/>' .
                     '<input type="button" class="btn btn-danger" id="delete" name="id" onclick="DeleteAccount(\'' . $row['id'] . '\')" value="Delete"/></td>' .
                     '</form>';

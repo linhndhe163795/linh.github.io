@@ -49,30 +49,17 @@
                 <label for="active">Role:</label>
                 <div>
                     <?php
-                    if (isset($valid['role_type']) && $valid['role_type'] == 1) {
-                        echo
-                        '<label class="radio-inline">
-                        <input checked type="radio" name="role_type" value="1">Super Admin
-                    </label>
-                    <label class="radio-inline">
-                        <input type="radio" name="role_type" value="2">Admin
-                    </label>';
-                    } else if (isset($valid['role_type']) && $valid['role_type'] == 2) {
-                        echo '<label class="radio-inline">
-                        <input type="radio" name="role_type" value="1">Super Admin
-                    </label>
-                    <label class="radio-inline">
-                        <input checked type="radio" name="role_type" value="2">Admin
-                    </label>';
-                    } else {
-                        echo '<label class="radio-inline">
-                        <input type="radio" name="role_type" value="1">Super Admin
-                    </label>
-                    <label class="radio-inline">
-                        <input type="radio" name="role_type" value="2">Admin
-                    </label>';
-                    }
+                    $superAdminChecked = (isset($valid['role_type']) && $valid['role_type'] == 1) ? 'checked' : '';
+                    $adminChecked = (isset($valid['role_type']) && $valid['role_type'] == 2) ? 'checked' : '';
                     ?>
+
+                    <label class="radio-inline">
+                        <input <?= $superAdminChecked ?> type="radio" name="role_type" value="1">Super Admin
+                    </label>
+                    <label class="radio-inline">
+                        <input <?= $adminChecked ?> type="radio" name="role_type" value="2">Admin
+                    </label>
+
                     <div style = "color: red"><?php echo isset($errors['role_type']) ? $errors['role_type'] : ""
                     ?></div>
                 </div>

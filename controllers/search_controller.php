@@ -6,6 +6,8 @@ require_once 'models/admin.php';
 require_once 'models/user.php';
 session_start();
 
+define('SUPER_ADMIN', 1);
+define('ADMIN', 2);
 class SearchController extends BaseController {
 
     function __construct() {
@@ -13,7 +15,7 @@ class SearchController extends BaseController {
     }
 
     public function searchAdmin() {
-        if (isset($_SESSION['role_type']) && ($_SESSION['role_type']) == 1) {
+        if (isset($_SESSION['role_type']) && ($_SESSION['role_type']) == SUPER_ADMIN) {
             $email = '';
             $name = '';
             $email = isset($_GET['email']) ? $_GET['email'] : '';
@@ -27,13 +29,13 @@ class SearchController extends BaseController {
             $number_of_page = ceil($number_of_result / $end);
             $list = Admin::searchbyNameandEmail($email, $name, $start, $end);
 
-            $this->render("search", array(
+            $this->render("search", [
                 'list' => $list,
                 'page' => $page,
                 'name' => $name,
                 'email' => $email,
                 'number_of_page' => $number_of_page,
-            ));
+            ]);
         } else {
             $this->render("error");
             header("Refresh: 3; index.php?controller=login&action=userlogin");
@@ -41,8 +43,8 @@ class SearchController extends BaseController {
     }
 
     public function searchUser() {
-        if (isset($_SESSION['role_type']) && ($_SESSION['role_type']) == 1 ||
-                ($_SESSION['role_type']) == 2) {
+        if (isset($_SESSION['role_type']) && ($_SESSION['role_type']) == SUPER_ADMIN ||
+                ($_SESSION['role_type']) == ADMIN) {
             $email = '';
             $name = '';
 //            if (isset($_GET['search'])) {
@@ -56,13 +58,13 @@ class SearchController extends BaseController {
             $number_of_result = User::countUser($email, $name);
             $number_of_page = ceil($number_of_result / $end);
             $list = User::searchUserByNameAndEmail($name, $email, $start, $end);
-            $this->render("searchuser", array(
+            $this->render("searchuser", [
                 'list' => $list,
                 'page' => $page,
                 'name' => $name,
                 'email' => $email,
                 'number_of_page' => $number_of_page,
-            ));
+            ]);
         } else {
             $this->render("error");
             header("Refresh: 3; index.php?controller=login&action=userlogin");

@@ -14,7 +14,7 @@
 
         <div class="form-group">
             <label for="id">ID:</label>
-            <input type="text" class="form-control" name="id" readonly value="<?php  echo isset($_GET['id']) ? $_GET['id'] : " " ?>">
+            <input type="text" class="form-control" name="id" readonly value="<?php echo isset($_GET['id']) ? $_GET['id'] : " " ?>">
         </div>
         <div class="form-group">
             <input type="file" class="form-control-file" name="avatar">
@@ -30,7 +30,7 @@
         </div>
         <div class="form-group">
             <label for="email">Email:</label>
-            <input type="email" class="form-control" name="email" value="<?php echo isset($valid['email']) ? $valid['email'] : $detail[0]['email'] ?>" >
+            <input type="text" class="form-control" name="email" value="<?php echo isset($valid['email']) ? $valid['email'] : $detail[0]['email'] ?>" >
             <div style="color: red"><?php echo isset($errors['email']) ? $errors['email'] : " " ?></div>
 
         </div>
@@ -50,23 +50,24 @@
             <label for="active">Status:</label>
             <div>
                 <?php
-                if (isset($detail[0]['status']))
-                    if ($detail[0]['status'] == 1) {
-                        echo '<label class="radio-inline">
-                    <input checked="" type="radio" name="active" value="1">Active
-                </label>
-                <label class="radio-inline">
-                    <input type="radio" name="active" value="0">Banned
-                </label>';
-                    } else if ($detail[0]["status"] == 0) {
-                    echo '<label class="radio-inline">
-                    <input  type="radio" name="active" value="1">Active
-                </label>
-                <label class="radio-inline">
-                    <input checked type="radio" name="active" value="0">Banned
-                </label>';
+                $activeChecked = (isset($detail[0]['status']) && $detail[0]['status'] == 1) ? 'checked' : '';
+                $bannedChecked = (isset($detail[0]['status']) && $detail[0]['status'] == 0) ? 'checked' : '';
+
+                if (isset($valid['active']) && $valid['active'] == 1) {
+                    $activeChecked = 'checked';
+                }
+                if (isset($valid['active']) && $valid['active'] == 0) {
+                    $bannedChecked = 'checked';
                 }
                 ?>
+
+                <label class="radio-inline">
+                    <input <?= $activeChecked ?> type="radio" name="active" value="1">Active
+                </label>
+                <label class="radio-inline">
+                    <input <?= $bannedChecked ?> type="radio" name="active" value="0">Banned
+                </label>
+
             </div>
         </div>
         <button type="reset" name = 'reset'class="btn btn-secondary">Reset</button>

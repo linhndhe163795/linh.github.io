@@ -68,7 +68,7 @@ include 'header.php';
                     echo '<td style="display:inline"><a href="index.php?controller=edit&action=loadDataEdit&id=' . $row['id'] . '"><button class="btn btn-success">Edit</button></a>';
                     echo
                     '<form id="delete" action="index.php?controller=edit&action=deleteUser&id=' . $row['id'] . '" method="POST">' .
-                    '<input type="hidden" name="deleteaccount" id="deleteId" value="' . $row['id'] . '"/>' .
+                    '<input type="hidden" name="delete_account" id="deleteId" value="' . $row['id'] . '"/>' .
                     '<input type="hidden" name="del_flag" id="deleteId" value="' . $row['del_flag'] . '"/>' .
                     '<input type="button" class="btn btn-danger" id="delete" name="id" onclick="DeleteAccount(\'' . $row['id'] . '\')" value="Delete"/></td>' .
                     '</form>';

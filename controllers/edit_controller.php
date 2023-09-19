@@ -7,6 +7,8 @@ require_once 'helper/common.php';
 require_once 'helper/validation.php';
 
 session_start();
+define('SUPER_ADMIN', 1);
+define('ADMIN', 2);
 
 class EditController extends BaseController {
 
@@ -39,7 +41,8 @@ class EditController extends BaseController {
             if (isset($_POST['submitEdit'])) {
                 $avatar = $_FILES['avatar']['name'];
                 $_POST['avatar'] = $avatar;
-                $validate = Validation::validateEdit($_POST);
+//                dd($_POST);
+                $validate = Validation::validateInput($_POST);
                 if ($validate['status']) {
                     Admin::editAdmin($_POST);
                     $this->render("search", [
@@ -61,14 +64,14 @@ class EditController extends BaseController {
     }
 
     public function delete() {
-        if (isset($_SESSION['role_type']) && ($_SESSION['role_type']) == 1) {
-            if (isset($_POST['deleteaccount'])) {
-                $id = $_POST['deleteaccount'];
+        if (isset($_SESSION['role_type']) && ($_SESSION['role_type']) == SUPER_ADMIN) {
+            if (isset($_POST['delete_account'])) {
+                $id = $_POST['delete_account'];
                 $del_flag = $_POST['del_flag'];
                 if ($del_flag === '0') {
                     $update = 1;
                     Admin::deleteAdmin($id, $update);
-                    echo '<div style="color: red">Delete Successfully</div>';
+                    echo 'Delete Successfully';
                     header("Refresh: 3; index.php?controller=search&action=searchAdmin");
                 }
             } else {
@@ -80,8 +83,8 @@ class EditController extends BaseController {
     }
 
     public function loadDataEdit() {
-        if (isset($_SESSION['role_type']) && ($_SESSION['role_type']) == 1 ||
-                isset($_SESSION['role_type']) == 2) {
+        if (isset($_SESSION['role_type']) && ($_SESSION['role_type']) == SUPER_ADMIN ||
+                isset($_SESSION['role_type']) == ADMIN) {
             $detailUser = User::detailUser($_GET['id']);
             $this->render("edituser", array('detail' => $detailUser));
         } else {
@@ -90,13 +93,13 @@ class EditController extends BaseController {
     }
 
     public function editUser() {
-        if (isset($_SESSION['role_type']) && ($_SESSION['role_type']) == 1 ||
+        if (isset($_SESSION['role_type']) && ($_SESSION['role_type']) == SUPER_ADMIN ||
                 ($_SESSION['role_type']) == 2) {
             $detailUser = User::detailUser($_GET['id']);
             if (isset($_POST['submitEdit'])) {
                 $avatar = $_FILES['avatar']['name'];
                 $_POST['avatar'] = $avatar;
-                $validate = Validation::validateEdit($_POST);
+                $validate = Validation::validateInput($_POST);
                 if ($validate['status']) {
                     User::editUser($_POST);
                     $this->render("searchuser", [
@@ -117,15 +120,15 @@ class EditController extends BaseController {
     }
 
     public function deleteUser() {
-        if (isset($_SESSION['role_type']) && ($_SESSION['role_type']) == 1 ||
-                ($_SESSION['role_type']) === 2) {
-            if (isset($_POST['deleteaccount'])) {
-                $id = $_POST['deleteaccount'];
+        if (isset($_SESSION['role_type']) && ($_SESSION['role_type']) == SUPER_ADMIN ||
+                ($_SESSION['role_type']) === ADMIN) {
+            if (isset($_POST['delete_account'])) {
+                $id = $_POST['delete_account'];
                 $del_flag = $_POST['del_flag'];
                 if ($del_flag === '0') {
                     $update = 1;
                     User::deleteUser($id, $update);
-                    echo '<div style="color: red">Delete Successfully</div>';
+                    echo 'Delete Successfully';
                     header("Refresh: 3; index.php?controller=search&action=searchUser");
                 }
             } else {

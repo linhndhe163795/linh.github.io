@@ -27,9 +27,8 @@ class LoginController extends BaseController {
                     $_SESSION['role_type'] = $infor['role_type'];
                     $this->render("homepage");
                 } else {
-                    $list = 'sai email hoac mat khau';
                     $this->render("login", [
-                        'messages' => 'Sai email hoac password'
+                        'messages' => 'Incorrect Password Or Email'
                     ]);
                 }
             } else {
@@ -53,7 +52,6 @@ class LoginController extends BaseController {
                 if ($check) {
                     $infor = User::getInfor($email, $password);
                     $_SESSION['username'] = $email;
-                    $_SESSION['password'] = $password;
                     $this->render("profile", ["infor" => $infor]);
                 } else {
                     $this->render("loginuser", [
