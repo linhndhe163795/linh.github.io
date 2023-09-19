@@ -95,7 +95,7 @@ class Validation {
 
         if (empty($data['role_type'])) {
             //Truyền lại giá trị vừa nhập
-            $result['valid']['role_type'] = $data['role_type'];
+            isset($data['role_type']) ? $result['valid']['role_type'] = $data['role_type'] : "";
             $result['valid']['email'] = $data['email'];
             $result['valid']['name'] = $data['name'];
 
