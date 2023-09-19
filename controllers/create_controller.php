@@ -27,7 +27,6 @@ class CreateController extends BaseController {
                 // step 1 @validate
 
                 $validate = Validation::validateInput($_POST);
-
                 // step 2 @ok => save / @fail => show errors
                 if ($validate['status']) {
                     Admin::createNewAccount($_POST);

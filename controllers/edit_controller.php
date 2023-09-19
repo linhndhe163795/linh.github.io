@@ -17,7 +17,7 @@ class EditController extends BaseController {
     }
 
     public function edit() {
-        if (isset($_SESSION['role_type']) && ($_SESSION['role_type']) == 1) {
+        if (isset($_SESSION['role_type']) && ($_SESSION['role_type']) ==SUPER_ADMIN) {
             $detailAdmin = Admin::detailAdmin($_GET['id']);
             if (isset($_GET['id'])) {
                 $id = $_GET['id'];
@@ -36,7 +36,7 @@ class EditController extends BaseController {
     }
 
     public function editAdmin() {
-        if (isset($_SESSION['role_type']) && ($_SESSION['role_type']) == 1) {
+        if (isset($_SESSION['role_type']) && ($_SESSION['role_type']) == SUPER_ADMIN) {
             $detailUser = Admin::detailAdmin($_GET['id']);
             if (isset($_POST['submitEdit'])) {
                 $avatar = $_FILES['avatar']['name'];
