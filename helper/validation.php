@@ -75,7 +75,7 @@ class Validation {
             //Truyền lại biến nếu như nhập đúng
             $result['valid']['email'] = $data['email'];
             $result['valid']['name'] = $data['name'];
-            $result['messages']['role_type'] = 'Choose Role_Type';
+            $result['valid']['role_type'] = $data['role_type'];
 
             $result['messages']['password'] = 'Password not match';
         }

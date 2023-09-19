@@ -27,13 +27,13 @@ class SearchController extends BaseController {
             $number_of_page = ceil($number_of_result / $end);
             $list = Admin::searchbyNameandEmail($email, $name, $start, $end);
 
-            $this->render("search", array(
+            $this->render("search", [
                 'list' => $list,
                 'page' => $page,
                 'name' => $name,
                 'email' => $email,
                 'number_of_page' => $number_of_page,
-            ));
+            ]);
         } else {
             $this->render("error");
             header("Refresh: 3; index.php?controller=login&action=userlogin");
@@ -56,13 +56,13 @@ class SearchController extends BaseController {
             $number_of_result = User::countUser($email, $name);
             $number_of_page = ceil($number_of_result / $end);
             $list = User::searchUserByNameAndEmail($name, $email, $start, $end);
-            $this->render("searchuser", array(
+            $this->render("searchuser", [
                 'list' => $list,
                 'page' => $page,
                 'name' => $name,
                 'email' => $email,
                 'number_of_page' => $number_of_page,
-            ));
+            ]);
         } else {
             $this->render("error");
             header("Refresh: 3; index.php?controller=login&action=userlogin");
