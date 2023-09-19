@@ -25,8 +25,9 @@ class CreateController extends BaseController {
                 $avatar = $_FILES['avatar']['name'];
                 $_POST['avatar'] = $avatar;
                 // step 1 @validate
+
                 $validate = Validation::validateInput($_POST);
-//                dd($_POST);
+
                 // step 2 @ok => save / @fail => show errors
                 if ($validate['status']) {
                     Admin::createNewAccount($_POST);

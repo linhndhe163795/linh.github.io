@@ -10,6 +10,7 @@ require_once 'models/admin.php';
 class Validation {
 
     static function validateInput($data) {
+   
         $result = [
             'status' => false,
             'messages' => []
@@ -94,12 +95,13 @@ class Validation {
 
         if (empty($data['role_type'])) {
             //Truyền lại giá trị vừa nhập
+            $result['valid']['role_type'] = $data['role_type'];
             $result['valid']['email'] = $data['email'];
             $result['valid']['name'] = $data['name'];
-            //Hiển thị thông báo lỗi
-            $result['messages']['role_type'] = 'Choose Role_Type';
-        }
 
+            $result['messages']['avatar'] = "Choose Image";
+        }
+        
         if (empty($result['messages'])) {
             $result['status'] = true;
         }

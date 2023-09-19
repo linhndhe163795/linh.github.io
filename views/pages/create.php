@@ -62,6 +62,7 @@
 
                     <div style = "color: red"><?php echo isset($errors['role_type']) ? $errors['role_type'] : ""
                     ?></div>
+
                 </div>
             </div>
             <button type="reset" name = 'reset'class="btn btn-secondary">Reset</button>
