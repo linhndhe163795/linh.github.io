@@ -55,7 +55,7 @@ class LoginController extends BaseController {
                     $this->render("profile", ["infor" => $infor]);
                 } else {
                     $this->render("loginuser", [
-                        'messages' => 'Sai email hoac password !'
+                        'messages' => 'Incorrect username or password!'
                     ]);
                 }
             } else {
