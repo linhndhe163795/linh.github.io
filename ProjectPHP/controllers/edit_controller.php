@@ -39,7 +39,7 @@ class EditController extends BaseController {
             if (isset($_POST['submitEdit'])) {
                 $avatar = $_FILES['avatar']['name'];
                 $_POST['avatar'] = $avatar;
-                $validate = Validation::validateEditAdmin($_POST);
+                $validate = Validation::validateEdit($_POST);
                 if ($validate['status']) {
                     Admin::editAdmin($_POST);
                     $this->render("search", [
@@ -96,7 +96,7 @@ class EditController extends BaseController {
             if (isset($_POST['submitEdit'])) {
                 $avatar = $_FILES['avatar']['name'];
                 $_POST['avatar'] = $avatar;
-                $validate = Validation::validateEditAdmin($_POST);
+                $validate = Validation::validateEdit($_POST);
                 if ($validate['status']) {
                     User::editUser($_POST);
                     $this->render("searchuser", [

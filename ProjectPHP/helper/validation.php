@@ -86,7 +86,7 @@ class Validation {
         return $result;
     }
 
-    static function validateEditAdmin($data) {
+    static function validateEdit($data) {
         $result = [
             'status' => FALSE,
             'messages' => []
@@ -149,14 +149,30 @@ class Validation {
 
             $result['messages']['password'] = 'Password not match';
         }
-        
+
         if (empty($result['messages'])) {
             $result['status'] = true;
         }
         return $result;
     }
-    static function validateEditUser($data){
-        
-    }
-}
 
+    static function validateLogin($data) {
+        $result = [
+            'status' => FALSE,
+            'messages' => []
+        ];
+        if (empty($data['email'])) {
+            $result['messages']['email'] = 'Name can not be blank.';
+        }
+        if (empty($data['password'])) {
+            $result['valid']['email'] = $data['email'];
+            $result['messages']['password'] = 'Password can not be blank.';
+        }
+
+        if (empty($result['messages'])) {
+            $result['status'] = true;
+        }
+        return $result;
+    }
+
+}

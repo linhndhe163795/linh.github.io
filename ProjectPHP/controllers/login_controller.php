@@ -4,6 +4,7 @@ require_once 'controllers/base_controller.php';
 require_once 'models/admin.php';
 require_once 'models/user.php';
 require_once 'helper/common.php';
+require_once 'helper/validation.php';
 session_start();
 
 class LoginController extends BaseController {
@@ -14,30 +15,28 @@ class LoginController extends BaseController {
 
     public function dangnhap() {
         if (isset($_POST['submit'])) {
-            $em = $_POST['email'];
-            $ps = $_POST['password'];
-            $ps = md5($_POST['password']);
-            $check = Admin::checkAccount($em, $ps);
-            $infor = Admin::getInfor($em, $ps);
-
-            if (empty($em) && empty($ps)) {
-                $this->render("login", ['messErrorEamil' => 'Email can not be blank',
-                    'messErrorPassword' => 'Password can not be blank',
+            $email = $_POST['email'];
+            $password = md5($_POST['password']);
+            $validate = Validation::validateLogin($_POST);
+            $check = Admin::checkAccount($email, $password);
+            if ($validate['status']) {
+                if ($check) {
+                    $infor = Admin::getInfor($email, $password);
+                    $_SESSION['username'] = $email;
+                    $_SESSION['password'] = $password;
+                    $_SESSION['role_type'] = $infor['role_type'];
+                    $this->render("homepage");
+                } else {
+                    $list = 'sai email hoac mat khau';
+                    $this->render("login", [
+                        'messages' => 'Sai email hoac password'
                     ]);
-            } else if (empty($em)) {
-                $this->render("login", ['messErrorEamil' => 'Email can not be blank',
-                    'password' => $ps]);
-            } else if (empty($ps)) {
-                $this->render("login", ['messErrorPassword' => 'Password can not be blank',
-                    'email' => $em]);
-            } else if ($check === TRUE) {
-                $_SESSION['username'] = $em;
-                $_SESSION['password'] = $ps;
-                $_SESSION['role_type'] = $infor['role_type'];
-                $this->render("homepage");
+                }
             } else {
-                $list = 'sai mat khau';
-                $this->render("login", array('list' => $list , 'email'=>$em));
+                $this->render("login", [
+                    'errors' => $validate['messages'],
+                    'valid' => $validate['valid']
+                ]);
             }
         } else {
             $this->render("login");
@@ -47,18 +46,25 @@ class LoginController extends BaseController {
     public function userlogin() {
         if (isset($_POST['submit'])) {
             $email = $_POST['email'];
-            $password = $_POST['password'];
-            $password = md5($password);
+            $password = md5($_POST['password']);
+            $validate = Validation::validateLogin($_POST);
             $check = User::checkAccount($email, $password);
-            $infor = User::getInfor($email, $password);
-            if ($check === TRUE) {
-                $_SESSION['username'] = $email;
-                $_SESSION['password'] = $password;
-//                dd($infor);
-                $this->render("profile", ["infor" => $infor]);
+            if ($validate['status']) {
+                if ($check) {
+                    $infor = User::getInfor($email, $password);
+                    $_SESSION['username'] = $email;
+                    $_SESSION['password'] = $password;
+                    $this->render("profile", ["infor" => $infor]);
+                } else {
+                    $this->render("loginuser", [
+                        'messages' => 'Sai email hoac password !'
+                    ]);
+                }
             } else {
-                $list = 'sai mat khau';
-                $this->render("loginuser", array('list' => $list));
+                $this->render("loginuser", [
+                    'errors' => $validate['messages'],
+                    'valid' => $validate['valid']
+                ]);
             }
         } else {
             $this->render("loginuser");

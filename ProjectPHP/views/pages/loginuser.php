@@ -27,14 +27,16 @@
                             <form method="POST" action="/index.php?controller=login&action=userlogin">
                                 <div class="form-group">
                                     <label for="username">Tên đăng nhập</label>
-                                    <input type="email" class="form-control" id="username" name="email" required>
+                                    <input type="email" class="form-control" id="username" name="email"  value="<?php echo isset($valid['email']) ? $valid['email'] : "" ?>">
+                                    <div style="color: red"><?php echo isset($errors['email']) ? $errors['email'] : " " ?>
                                 </div>
                                 <div class="form-group">
                                     <label for="password">Mật khẩu</label>
-                                    <input type="password" class="form-control" id="password" name="password" required>
+                                    <input type="password" class="form-control" id="password" name="password" >
+                                    <div style="color: red"><?php echo isset($errors['password']) ? $errors['password'] : " " ?>
                                 </div>
                                 <button type="submit" class="btn btn-primary"name="submit">Đăng nhập</button>
-                                <div> <?php echo isset($list) ? $list : ""  ?></div>
+                               <div  style="color: red"> <?php echo isset($messages) ? $messages : "" ?></div>
                             </form>
                             <a href="#">Login via Facebook</a>
                         </div>

@@ -27,18 +27,18 @@
                             <form method="POST" action="/index.php?controller=login&action=dangnhap">
                                 <div class="form-group">
                                     <label for="username">Tên đăng nhập</label>
-                                    <input type="email" class="form-control" id="username" name="email" value="<?php echo isset($email) ? $email : "" ?>" >
-                                    <div style="color: red"><?php echo isset($messErrorEamil) ? $messErrorEamil : " " ?>
+                                    <input type="email" class="form-control" id="username" name="email" value="<?php echo isset($valid['email']) ? $valid['email'] : "" ?>" >
+                                    <div style="color: red"><?php echo isset($errors['email']) ? $errors['email'] : " " ?>
                                     </div>
                                     <div class="form-group">
                                         <label for="password">Mật khẩu</label>
-                                        <input type="password" class="form-control" id="password" name="password" value="">
-                                        <div style="color: red"><?php echo isset($messErrorPassword) ? $messErrorPassword : " " ?>
+                                        <input type="password" class="form-control" id="password" name="password" >
+                                        <div style="color: red"><?php echo isset($errors['password']) ? $errors['password'] : " " ?>
                                         </div>
                                         <div>
                                             <button type="submit" class="btn btn-primary"name="submit">Đăng nhập</button>
                                         </div>
-                                        <div  style="color: red"> <?php echo isset($list) ? $list : "" ?></div>
+                                        <div  style="color: red"> <?php echo isset($messages) ? $messages : "" ?></div>
                                     </div>
                             </form>
 
