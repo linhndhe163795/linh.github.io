@@ -157,15 +157,15 @@ class User {
 
     public static function editUser($user = array()) {
         $db = DB::getInstance();
-        $password = md5($user[3]);
+        $password = md5($user['password']);
         $stmt = $db->prepare('UPDATE users SET avatar = :avatar , name = :name,'
                 . 'email = :email, password = :password, status = :status where id = :id');
-        $stmt->bindParam(':avatar', $user[0], PDO::PARAM_STR);
-        $stmt->bindParam(':name', $user[1], PDO::PARAM_STR);
-        $stmt->bindParam(':email', $user[2], PDO::PARAM_STR);
+        $stmt->bindParam(':avatar', $user['avatar'], PDO::PARAM_STR);
+        $stmt->bindParam(':name', $user['name'], PDO::PARAM_STR);
+        $stmt->bindParam(':email', $user['email'], PDO::PARAM_STR);
         $stmt->bindParam(':password', $password, PDO::PARAM_STR);
-        $stmt->bindParam(':status', $user[4], PDO::PARAM_INT);
-        $stmt->bindParam(':id', $user[5], PDO::PARAM_INT);
+        $stmt->bindParam(':status', $user['active'], PDO::PARAM_INT);
+        $stmt->bindParam(':id', $user['id'], PDO::PARAM_INT);
 //        dd($user);
         if ($stmt->execute()) {
             return true;

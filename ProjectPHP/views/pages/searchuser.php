@@ -33,7 +33,7 @@ include 'header.php';
         </div>
         <button type="submit" name="searchuser" class="btn btn-primary">Search</button>
         <button type="reset" name = 'reset'class="btn btn-secondary">Reset</button>
-        <div style="color: red"><?php echo isset($messEdit) ? $messEdit : " " ?></div>
+        <div style="color: red"><?php echo isset($messages) ? $messages : " " ?></div>
     </form>
 
     <?php if (isset($list))  ?>
@@ -46,13 +46,13 @@ include 'header.php';
                 <th>Name</th>
                 <th>Email</th>
                 <th >Status</th>
-                <th  style="text-align: center">Action</th>
+                <th>Action</th>
                 <!--<th hidden=""></th>-->
             </tr>
         </thead>   
         <tbody>
             <?php
-            if (empty($list)) {
+            if (isset($list) && empty($list)) {
                 echo '<tr><td colspan="7" style="text-align: center;">No results found!</td></tr>';
             } else if (isset($list)) {
                 foreach ($list as $row) {

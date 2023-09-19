@@ -31,7 +31,7 @@ include 'header.php';
         </div>
         <button type="submit" class="btn btn-primary" name="search" value="search">Search</button>
         <button type="reset" class="btn btn-secondary">Reset</button>
-        <div style="color: red"><?php echo isset($mess) ? $mess : "" ?></div>
+        <div style="color: red"><?php echo isset($messages) ? $messages : "" ?></div>
     </form>
 
     <?php if (isset($list))  ?>

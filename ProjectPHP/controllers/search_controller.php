@@ -16,7 +16,6 @@ class SearchController extends BaseController {
         if (isset($_SESSION['role_type']) && ($_SESSION['role_type']) == 1) {
             $email = '';
             $name = '';
-//            if (isset($_GET['search'])) {
             $email = isset($_GET['email']) ? $_GET['email'] : '';
             $name = isset($_GET['name']) ? $_GET['name'] : '';
 
@@ -35,9 +34,6 @@ class SearchController extends BaseController {
                 'email' => $email,
                 'number_of_page' => $number_of_page,
             ));
-//            } else {
-//                $this->render("search");
-//            }
         } else {
             $this->render("error");
             header("Refresh: 3; index.php?controller=login&action=userlogin");
@@ -59,10 +55,7 @@ class SearchController extends BaseController {
 
             $number_of_result = User::countUser($email, $name);
             $number_of_page = ceil($number_of_result / $end);
-//            dd($name);
-//            dd($email);
             $list = User::searchUserByNameAndEmail($name, $email, $start, $end);
-//            dd($list);
             $this->render("searchuser", array(
                 'list' => $list,
                 'page' => $page,
@@ -70,9 +63,6 @@ class SearchController extends BaseController {
                 'email' => $email,
                 'number_of_page' => $number_of_page,
             ));
-
-//        }
-//        $this->render("searchuser");
         } else {
             $this->render("error");
             header("Refresh: 3; index.php?controller=login&action=userlogin");

@@ -22,50 +22,50 @@
         </div>
         <div class="form-group">
 
-            <input type="file" class="form-control-file" maxlength="128" name="avatar"  value='/views/pages/media/<?php echo isset($admin[4]) ? $admin[4] : "" ?>'>
+            <input type="file" class="form-control-file" maxlength="128" name="avatar"  >
             <label for="avatar">Avatar:</label>
             <img  style="max-width: 70px; max-height: 70px;" src="/views/pages/media/<?php echo isset($detail[0]['avatar']) ? $detail[0]['avatar'] : "" ?>"/>
-            <div style="color: red"><?php echo isset($messUpload) ? $messUpload : " " ?></div>
+            <div style="color: red"><?php echo isset($errors['avatar']) ? $errors['avatar'] : " " ?></div>
         </div>
         <div class="form-group">
             <label for="name">Name:</label>
-            <input type="text" class="form-control" maxlength="100" minlength="3" name="name" value="<?php echo isset($name) ? $name : $detail[0]['name'] ?>" >
-            <div style="color: red"><?php echo isset($messName) ? $messName : " " ?></div>
+            <input type="text" class="form-control" maxlength="100" minlength="3" name="name" value="<?php echo isset($valid['name']) ? $valid['name'] : $detail[0]['name'] ?>" >
+            <div style="color: red"><?php echo isset($errors['name']) ? $errors['name'] : " " ?></div>
         </div>
         <div class="form-group">
             <label for="email">Email:</label>
-            <input type="text" class="form-control"  maxlength="100" minlength="3" name="email" value='<?php echo isset($email) ?  $email : $detail[0]['email'] ?>' >
-            <div style="color: red"><?php echo isset($messEmail) ? $messEmail : " " ?></div>
+            <input type="text" class="form-control"  maxlength="100" minlength="3" name="email" value='<?php echo isset($valid['email']) ? $valid['email'] : $detail[0]['email'] ?>' >
+            <div style="color: red"><?php echo isset($errors['email']) ? $errors['email'] : " " ?></div>
         </div>
         <div class="form-group">
             <label for="password">Password:</label>
             <input type="password" class="form-control"maxlength="100" minlength="3" name="password"  value=>
         </div>
-        <div style="color: red"><?php echo isset($messPassword) ? $messPassword : " " ?></div>
+        <div style="color: red"><?php echo isset($errors['password']) ? $errors['password'] : " " ?></div>
         <div class="form-group">
             <label for="verifyPassword">Verify Password:</label>
             <input type="password" class="form-control" maxlength="100" minlength="3" name="verifyPassword" value= >
-            <div style="color: red"><?php echo isset($messVeriPassword) ? $messVeriPassword : " " ?></div>
+            <div style="color: red"><?php echo isset($errors['verifyPassword']) ? $errors['verifyPassword'] : " " ?></div>
 
         </div>
         <div class="form-group">
             <label for="active">Status:</label>
             <div>
                 <?php
-                if (isset($detail[0]['del_flag']))
-                    if ($detail[0]['del_flag'] == 0) {
+                if (isset($detail[0]['role_type']))
+                    if ($detail[0]['role_type'] == 1) {
                         echo '<label class="radio-inline">
-                                <input checked="" type="radio" name="active" value="0">Active
+                                <input checked="" type="radio" name="active" value="1">Super Admin
                                 </label>
                                     <label class="radio-inline">
-                                 <input type="radio" name="active" value="1">Banned
+                                 <input type="radio" name="active" value="2">Admin
                                  </label>';
-                    } else {
+                    } else if ($detail[0]['role_type'] == 2) {
                         echo '<label class="radio-inline">
-                                        <input type="radio" name="active" value="0">Active
+                                        <input type="radio" name="active" value="1">Super Admin 
                                       </label>
                                             <label class="radio-inline">
-                                        <input checked="" type="radio" name="active" value="1">Banned
+                                        <input checked="" type="radio" name="active" value="2">Admin
                                         </label>';
                     }
                 ?>

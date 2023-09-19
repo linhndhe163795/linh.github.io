@@ -98,7 +98,7 @@ class Admin {
 
     public static function detailAdmin($id) {
         $db = DB::getInstance();
-        $stmt = $db->prepare('SELECT id,name,email,password,avatar,del_flag from admin where id = :id');
+        $stmt = $db->prepare('SELECT id,name,email,password,avatar,role_type from admin where id = :id');
         $stmt->bindParam(':id', $id, PDO::PARAM_STR);
         $stmt->execute();
         $list = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -107,22 +107,21 @@ class Admin {
 //            dd($list);
             return $list;
         } else {
-            return []; // Trả về mảng rỗng nếu không tìm thấy dữ liệu
+            return []; 
         }
     }
 
     public static function editAdmin($admin = array()) {
         $db = DB::getInstance();
-        $pass = md5($admin[2]);
-        $stmt = $db->prepare('UPDATE admin SET name = :name, email = :email, password = :password, avatar = :avatar, del_flag = :del_flag WHERE id = :id');
+        $pass = md5($admin['password']);
+        $stmt = $db->prepare('UPDATE admin SET name = :name, email = :email, password = :password, avatar = :avatar, role_type = :role_type WHERE id = :id');
 
-        $stmt->bindParam(':name', $admin[0], PDO::PARAM_STR);
-        $stmt->bindParam(':email', $admin[1], PDO::PARAM_STR);
+        $stmt->bindParam(':name', $admin['name'], PDO::PARAM_STR);
+        $stmt->bindParam(':email', $admin['email'], PDO::PARAM_STR);
         $stmt->bindParam(':password', $pass, PDO::PARAM_STR);
-        $stmt->bindParam(':avatar', $admin[3], PDO::PARAM_STR);
-        $stmt->bindParam(':del_flag', $admin[4], PDO::PARAM_INT);
-        $stmt->bindParam(':id', $admin[5], PDO::PARAM_INT);
-//        dd($admin);
+        $stmt->bindParam(':avatar', $admin['avatar'], PDO::PARAM_STR);
+        $stmt->bindParam(':role_type', $admin['active'], PDO::PARAM_INT);
+        $stmt->bindParam(':id', $admin['id'], PDO::PARAM_INT);
         if ($stmt->execute()) {
             return true;
         } else {
@@ -132,9 +131,8 @@ class Admin {
 
     public static function createNewAccount($account) {
         $db = DB::getInstance();
-//        $passwordHash = password_hash($account['password'], PASSWORD_DEFAULT);
         $passwordmd5 = md5($account['password']);
-
+        $account['del_flag'] = 0;
         $stmt = $db->prepare('INSERT INTO admin (name, email, password, avatar, role_type, del_flag)'
                 . 'VALUES (:name, :email, :password, :avatar, :role_type, :del_flag)');
         $stmt->bindParam(':name', $account['name'], PDO::PARAM_STR);

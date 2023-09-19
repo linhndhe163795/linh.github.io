@@ -3,6 +3,7 @@
 require_once 'models/admin.php';
 require_once 'controllers/base_controller.php';
 require_once 'helper/common.php';
+require_once 'helper/validation.php';
 session_start();
 
 class CreateController extends BaseController {
@@ -18,93 +19,24 @@ class CreateController extends BaseController {
     public function createAdmin() {
         if (isset($_SESSION['role_type']) && ($_SESSION['role_type']) == 1) {
             if (isset($_POST['submit'])) {
-                $avatar1 = Admin::checkUploadFile();
-                $name = $_POST['name'];
-                $email = $_POST['email'];
-                $password = $_POST['password'];
-                $avatar = $avatar1;
-                $passwordVerify = $_POST['verifyPassword'];
-                $passwordVerify = $_POST['verifyPassword'];
-                if (isset($_POST['role_type'])) {
-                    $role_type = $_POST['role_type'];
-                } else {
-                    $role_type = '';
-                }
-                if (empty($name)) {
-                    $this->render("create", [
-                        'messUpload' => "Choose Image",
-                        'email' => $email,
-                        'messName' => "Name can not be blank",
-                        'messRadio' => 'Choose Type Again'
-                    ]);
-                } else if (empty($email) && $avatar1 !== null) {
-                    $this->render("create", [
-                        'messUpload' => "Choose Image Again",
-                        'name' => $name,
-                        'messEmail' => "Email can not be blank",
-                        'messRadio' => 'Choose Type Again']);
-                } else if (empty($password) && $avatar1 !== null) {
-                    $this->render("create", [
-                        'messUpload' => "Choose Image Again",
-                        'name' => $name,
-                        'email' => $email,
-                        'messPassword' => "Password can not be blank",
-                        'messRadio' => 'Choose Type Again']);
-                } else if (empty($passwordVerify) && $avatar1 !== null) {
-                    $this->render("create", [
-                        'messUpload' => "Choose Image Again",
-                        'name' => $name,
-                        'email' => $email,
-                        'messVeriPass' => "Password Verify can not be blank",
-                        'messRadio' => 'Choose Type Again']);
-                } else if ($avatar1 === null) {
-                    $this->render("create", [
-                        'messUpload' => "Choose Image",
-                        'name' => $name,
-                        'email' => $email,
-                        'messRadio' => 'Choose Type Again']);
-                } else if (empty($role_type)) {
-                    $this->render("create", [
-                        'messRadio' => "Choose Role Type",
-                        'name' => $_POST['name'],
-                        'email' => $_POST['email'],
-                        'messUpload' => "Choose Again Image"]);
-                } else if (Admin::checkDuplicateEmail($email, 0)) {
-                    $this->render("create", [
-                        'messEmail' => "Email is exist",
-                        'account' => $account,
-                        'messUpload' => "Choose Again Image",
-                        'messRadio' => 'Choose Type Again']);
-                } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $avatar = $_FILES['avatar']['name'];
+                $_POST['avatar'] = $avatar;
 
-                    $this->render("create", [
-                        'messUpload' => 'Choose Image',
-                        'name' => $name,
-                        'messEmail' => 'Email is invalid'
+                // step 1 @validate
+                $validate = Validation::validateCreateAdmin($_POST);
+//                dd($_POST);   
+                // step 2 @ok => save / @fail => show errors
+                if ($validate['status']) {
+                    Admin::createNewAccount($_POST);
+                    $this->render("search", [
+                        'messages' => 'Create new account successfully'
                     ]);
-                } else if ($password !== $passwordVerify) {
-                    $account = [
-                        'name' => $_POST['name'],
-                        'email' => $_POST['email'],
-                        'avatar' => $avatar1,
-                    ];
-                    $this->render("create", [
-                        'messPassword' => 'Password not match',
-                        'name' => $_POST['name'],
-                        'email' => $_POST['email'],
-                        'messUpload' => "Choose Again Image",
-                        'messRadio' => 'Choose Type Again']);
                 } else {
-                    $account = [
-                        'name' => $_POST['name'],
-                        'email' => $_POST['email'],
-                        'password' => $_POST['password'],
-                        'avatar' => $avatar1,
-                        'role_type' => $_POST['role_type'],
-                        'del_flag' => 0
-                    ];
-                    Admin::createNewAccount($account);
-                    $this->render("homepage", ['messOfCreate' => 'Create successfully']);
+                    $this->render("create", [
+                        'errors' => $validate['messages'],
+                        'valid' => $validate['valid']
+                    ]);
+//                    dd($validate['valid']);
                 }
             } else {
                 $this->render("create");
