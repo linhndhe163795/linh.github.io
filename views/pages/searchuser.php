@@ -32,12 +32,12 @@ include 'header.php';
                    class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" value="<?php echo isset($name) ? $name : "" ?>">
         </div>
         <button type="submit" name="searchuser" class="btn btn-primary">Search</button>
-        <button type="reset" name = 'reset'class="btn btn-secondary">Reset</button>
+        <button type="button" onclick="ResetInput()" name = 'reset'class="btn btn-secondary">Reset</button>
         <div style="color: red"><?php echo isset($messages) ? $messages : " " ?></div>
     </form>
 
     <?php if (isset($list))  ?>
-    <table style="width: 1100px" id='example2' class="table table-bordered table-hover">
+    <table style="width: 1100px" id='example2' class="  table table-center bg-white mb-0">
 
         <thead>
             <tr>
@@ -52,9 +52,7 @@ include 'header.php';
         </thead>   
         <tbody>
             <?php
-            if (isset($list) && empty($list)) {
-                echo '<tr><td colspan="7" style="text-align: center;">No results found!</td></tr>';
-            } else if (isset($list)) {
+            if (isset($list)) {
                 foreach ($list as $row) {
                     echo '<tr>';
                     echo '<td>' . $row['id'] . '</td>';
@@ -74,7 +72,7 @@ include 'header.php';
                     '</form>';
                     echo '</tr>';
                 }
-            }
+            } 
             ?>
 
         </tbody>

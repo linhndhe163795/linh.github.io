@@ -4,10 +4,10 @@ require_once 'controllers/base_controller.php';
 require_once 'helper/common.php';
 require_once 'models/admin.php';
 require_once 'models/user.php';
+require_once 'helper/const.php';
 session_start();
 
-define('SUPER_ADMIN', 1);
-define('ADMIN', 2);
+
 class SearchController extends BaseController {
 
     function __construct() {
@@ -22,7 +22,7 @@ class SearchController extends BaseController {
             $name = isset($_GET['name']) ? $_GET['name'] : '';
 
             isset($_GET['page']) ? $page = $_GET['page'] : $page = 1;
-            $end = 5;
+            $end = PAGING;
             $start = ($page - 1) * $end;
 
             $number_of_result = Admin::countAdmin($email, $name);
@@ -52,7 +52,7 @@ class SearchController extends BaseController {
             $name = isset($_GET['name']) ? $_GET['name'] : '';
 
             isset($_GET['page']) ? $page = $_GET['page'] : $page = 1;
-            $end = 2;
+            $end = PAGING;
             $start = ($page - 1) * $end;
 
             $number_of_result = User::countUser($email, $name);

@@ -6,3 +6,8 @@ function DeleteAccount(id) {
 
     }
 }
+function ResetInput(){
+    document.getElementById('email').value = '';
+    document.getElementById('name').value = '';
+    
+}

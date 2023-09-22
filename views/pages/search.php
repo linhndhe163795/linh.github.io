@@ -30,12 +30,12 @@ include 'header.php';
                    class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" value="<?php echo isset($name) ? $name : "" ?>">
         </div>
         <button type="submit" class="btn btn-primary" name="search" value="search">Search</button>
-        <button type="reset" class="btn btn-secondary">Reset</button>
+        <button type="button" class="btn btn-secondary" onclick="ResetInput()">Reset</button>
         <div style="color: red"><?php echo isset($messages) ? $messages : "" ?></div>
     </form>
 
     <?php if (isset($list))  ?>
-    <table style="width: 1100px" id="example2" class="table table-bordered table-hover" >
+    <table style="width: 1100px" id="example2" class="  table table-center bg-white mb-0" >
         <thead>
             <tr>
                 <th>ID</th>
@@ -50,18 +50,16 @@ include 'header.php';
         </thead>   
         <tbody>
             <?php
-            if (isset($list) && empty($list)) {
-                echo '<tr><td colspan="7" style="text-align: center;">No results found!</td></tr>';
-            } else if (isset($list)) {
+             if (isset($list)) {
                 foreach ($list as $row) {
                     echo '<tr>';
                     echo '<td>' . $row['id'] . '</td>';
                     echo '<td>' . $row['name'] . '</td>';
                     echo '<td>' . $row['email'] . '</td>';
                     echo '<td>' . $row['password'] . '</td>';
-                    if ($row['role_type'] === '1')
+                    if ($row['role_type'] == 1)
                         echo '<td> Super Admin </td>';
-                    if ($row['role_type'] === '2')
+                    if ($row['role_type'] == 2)
                         echo '<td> Admin </td>';
                     echo '<td><img alt="123" style="max-height: 100px; max-width: 100px" src="/views/pages/media/' . $row['avatar'] . '"></td>';
                     echo '<td><a href="index.php?controller=edit&action=edit&id=' . $row['id'] . '"><button class="btn btn-success">Edit</button></a>';
@@ -150,22 +148,24 @@ include 'header.php';
 </body>
 
 <script src="assets/js/delete_account.js"></script>
-<!-- Bootstrap 3.3.6 -->
-<!--<script src="../../assets/js/bootstrap.min.js"></script>-->
-<!-- DataTables -->
 <script src="../../assets/js/jquery.dataTables.min.js"></script>
 <script src="../../assets/js/dataTables.bootstrap.min.js"></script>
 
 <script>
-    $(function () {
-        $('#example2').DataTable({
-            "paging": false,
-            "lengthChange": true,
-            "searching": false,
-            "ordering": true,
-            "info": false,
-            "autoWidth": false
-        });
-    });
+            $(function () {
+                $('#example2').DataTable({
+                    "paging": false,
+                    "lengthChange": true,
+                    "searching": false,
+                    "ordering": true,
+                    "info": false,
+                    "autoWidth": false
+                });
+            });
+            function ResetInput() {
+                document.getElementById('email').value = '';
+                document.getElementById('name').value = '';
+
+            }
 </script>
 </html>

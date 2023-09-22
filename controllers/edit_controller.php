@@ -5,10 +5,10 @@ require_once 'models/admin.php';
 require_once 'models/user.php';
 require_once 'helper/common.php';
 require_once 'helper/validation.php';
+require_once 'helper/const.php';
 
 session_start();
-define('SUPER_ADMIN', 1);
-define('ADMIN', 2);
+
 
 class EditController extends BaseController {
 
@@ -17,7 +17,7 @@ class EditController extends BaseController {
     }
 
     public function edit() {
-        if (isset($_SESSION['role_type']) && ($_SESSION['role_type']) ==SUPER_ADMIN) {
+        if (isset($_SESSION['role_type']) && ($_SESSION['role_type']) == SUPER_ADMIN) {
             $detailAdmin = Admin::detailAdmin($_GET['id']);
             if (isset($_GET['id'])) {
                 $id = $_GET['id'];
@@ -38,17 +38,25 @@ class EditController extends BaseController {
     public function editAdmin() {
         if (isset($_SESSION['role_type']) && ($_SESSION['role_type']) == SUPER_ADMIN) {
             $detailUser = Admin::detailAdmin($_GET['id']);
+            $avatar = $_FILES['avatar']['name']; // Lấy tên tệp ảnh
+            $previousAvatar = isset($_SESSION['previousAvatar']) ? $_SESSION['previousAvatar'] : $detailUser[0]['avatar'];
             if (isset($_POST['submitEdit'])) {
-                $avatar = $_FILES['avatar']['name'];
-                $_POST['avatar'] = $avatar;
-//                dd($_POST);
+                if (!empty($avatar)) {
+                    $_POST['avatar'] = $avatar;
+                    $_SESSION['previousAvatar'] = $avatar;
+                } else {
+                    $_POST['avatar'] = $previousAvatar;
+                }
                 $validate = Validation::validateInput($_POST);
-                if ($validate['status']) {
+                $validateImage = Validation::validateImageForEdit($_POST);
+                if ($validate['status'] && $validateImage['status']) {
                     Admin::editAdmin($_POST);
+                    unset($_SESSION['previousAvatar']);
                     $this->render("search", [
                         'messages' => 'Edit account successfully'
                     ]);
                 } else {
+                    dd($validate);
                     $this->render("edit", [
                         'errors' => $validate['messages'],
                         'valid' => $validate['valid'],
@@ -68,8 +76,8 @@ class EditController extends BaseController {
             if (isset($_POST['delete_account'])) {
                 $id = $_POST['delete_account'];
                 $del_flag = $_POST['del_flag'];
-                if ($del_flag === '0') {
-                    $update = 1;
+                if ($del_flag == DEL_FLAG_ACTIVE) {
+                    $update = UPDATE;
                     Admin::deleteAdmin($id, $update);
                     echo 'Delete Successfully';
                     header("Refresh: 3; index.php?controller=search&action=searchAdmin");
@@ -79,6 +87,7 @@ class EditController extends BaseController {
             }
         } else {
             $this->render("error");
+             header("Refresh: 3; index.php?controller=login&action=userlogin");
         }
     }
 
@@ -94,14 +103,22 @@ class EditController extends BaseController {
 
     public function editUser() {
         if (isset($_SESSION['role_type']) && ($_SESSION['role_type']) == SUPER_ADMIN ||
-                ($_SESSION['role_type']) == 2) {
+                ($_SESSION['role_type']) == ADMIN) {
             $detailUser = User::detailUser($_GET['id']);
             if (isset($_POST['submitEdit'])) {
-                $avatar = $_FILES['avatar']['name'];
-                $_POST['avatar'] = $avatar;
+                $avatar = $_FILES['avatar']['name']; // Lấy tên tệp ảnh
+                $previousAvatar = isset($_SESSION['previousAvatar']) ? $_SESSION['previousAvatar'] : $detailUser[0]['avatar'];
+                if (!empty($avatar)) {
+                    $_POST['avatar'] = $avatar;
+                    $_SESSION['previousAvatar'] = $avatar;
+                } else {
+                    $_POST['avatar'] = $previousAvatar;
+                }
                 $validate = Validation::validateInput($_POST);
-                if ($validate['status']) {
+                $validateImage = Validation::validateImageForEdit($_POST);
+                if ($validate['status'] && $validateImage['status']) {
                     User::editUser($_POST);
+                    unset($_SESSION['previousAvatar']);
                     $this->render("searchuser", [
                         'messages' => 'Edit account successfully'
                     ]);
@@ -125,8 +142,8 @@ class EditController extends BaseController {
             if (isset($_POST['delete_account'])) {
                 $id = $_POST['delete_account'];
                 $del_flag = $_POST['del_flag'];
-                if ($del_flag === '0') {
-                    $update = 1;
+                if ($del_flag == DEL_FLAG_ACTIVE) {
+                    $update = UPDATE;
                     User::deleteUser($id, $update);
                     echo 'Delete Successfully';
                     header("Refresh: 3; index.php?controller=search&action=searchUser");

@@ -4,7 +4,7 @@
 
     <head>
         <meta charset="utf-8" />
-        <title>Doctris - Doctor Appointment Booking System</title>
+        <title>Error</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="Premium Bootstrap 4 Landing Page Template" />
         <meta name="keywords" content="Appointment, Booking, System, Dashboard, Health" />
@@ -49,7 +49,7 @@
                         <img src="../../assets/image/svg/error.svg" class="img-fluid" alt="">
                         <h3 class="mb-4">Page Not Found</h3>
                         <p class="text-muted para-desc mx-auto">Explore and learn more about everything from machine learning and global payments to  scaling your team.</p>
-                        <a href="index.html" class="btn btn-primary mt-2">Go To Home</a>
+                        <a href="/index.php?controller=login&action=dangnhap" class="btn btn-primary mt-2">Go To Home</a>
                     </div><!--end col-->
                 </div><!--end row-->
             </div><!--end container-->

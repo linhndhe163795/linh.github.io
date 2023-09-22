@@ -20,10 +20,11 @@
     <div class="container1">
         <form action="" method="POST" enctype="multipart/form-data">
             <div class="form-group">
-                <input type="file" class="form-control-file" name="avatar" value="<?php echo isset($valid['avatar']) ? $valid['avatar'] : "" ?>" >
                 <label for="avatar">Avatar:</label>
-                <div style="color: red"><?php echo isset($errors['avatar']) ? $errors['avatar'] : "" ?></div>
-                <img  style="max-width: 70px; max-height: 70px;"/>
+                <input type="file" class="form-control-file" id="avatar_value" name="avatar" onchange="updateHiddenInput(this)">
+                <input type="hidden" name="avatar_value" id="avatar_value" >                
+                <img style="max-width: 70px; max-height: 70px;" src="/views/pages/media/<?php echo isset($valid['avatar']) ? $valid['avatar'] : '' ?>"/>
+                <div style="color: red"><?php echo isset($errorsImage['avatar']) ? $errorsImage['avatar'] : "" ?></div>
             </div>
             <div class="form-group">
                 <label for="name">Name:</label>
@@ -70,5 +71,6 @@
         </form>
 
 </body>
+<script src="../../assets/js/edit.js"></script>
 </html>
 

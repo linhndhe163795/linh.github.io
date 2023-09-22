@@ -1,6 +1,7 @@
 <?php
 
-include_once './helper/common.php';
+require_once 'helper/const.php';
+require_once 'helper/common.php';
 
 class User {
 
@@ -131,17 +132,21 @@ class User {
     public static function searchUserByNameAndEmail($name, $email, $start, $end) {
         $db = DB::getInstance();
         $list = [];
+        $del_flag = DEL_FLAG_ACTIVE;
+
         $stmt = $db->prepare('SELECT id , avatar, name, email, status,del_flag  '
                 . 'FROM users WHERE email LIKE :email AND name LIKE :name and '
-                . 'del_flag = 0 LIMIT  :start, :end');
+                . 'del_flag = :del_flag LIMIT  :start, :end');
+        
         $email = '%' . $email . '%';
         $name = '%' . $name . '%';
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
         $stmt->bindParam(':name', $name, PDO::PARAM_STR);
         $stmt->bindParam(':start', $start, PDO::PARAM_INT);
         $stmt->bindParam(':end', $end, PDO::PARAM_INT);
+        $stmt->bindParam(':del_flag', $del_flag, PDO::PARAM_INT);
         $stmt->execute();
-//        $list = $stmt->fetchAll();
+        
         foreach ($stmt->fetchAll() as $item) {
             $list [] = [
                 'id' => $item['id'],
@@ -160,13 +165,14 @@ class User {
         $password = md5($user['password']);
         $stmt = $db->prepare('UPDATE users SET avatar = :avatar , name = :name,'
                 . 'email = :email, password = :password, status = :status where id = :id');
+        
         $stmt->bindParam(':avatar', $user['avatar'], PDO::PARAM_STR);
         $stmt->bindParam(':name', $user['name'], PDO::PARAM_STR);
         $stmt->bindParam(':email', $user['email'], PDO::PARAM_STR);
         $stmt->bindParam(':password', $password, PDO::PARAM_STR);
         $stmt->bindParam(':status', $user['active'], PDO::PARAM_INT);
         $stmt->bindParam(':id', $user['id'], PDO::PARAM_INT);
-//        dd($user);
+        
         if ($stmt->execute()) {
             return true;
         } else {
@@ -178,27 +184,27 @@ class User {
         $db = DB::getInstance();
         $stmt = $db->prepare('SELECT id,avatar,name,email,password,status from users where id = :id ');
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        
         $stmt->execute();
         $list = $stmt->fetchAll(PDO::FETCH_ASSOC);
-//        dd($list);
+        
         if (!empty($list)) {
-//            dd($list);
             return $list;
         } else {
-            return []; // Trả về mảng rỗng nếu không tìm thấy dữ liệu
+            return [];
         }
     }
 
     public static function checkDuplicateEmail($email, $id) {
-    $db = DB::getInstance();
-    $stmt = $db->prepare('SELECT email '
-            . 'FROM users '
-            . 'WHERE email = :email'
-            . ' AND id != :id'); 
+        $db = DB::getInstance();
+        $stmt = $db->prepare('SELECT email '
+                . 'FROM users '
+                . 'WHERE email = :email'
+                . ' AND id != :id');
 
-    $stmt->bindParam(':email', $email, PDO::PARAM_STR);
-    $stmt->bindParam(':id', $id, PDO::PARAM_INT); 
-    $stmt->execute();
+        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
 
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 //        dd($result);
@@ -225,18 +231,22 @@ class User {
 
     public static function getInfor($email, $password) {
         $db = DB::getInstance();
+        $del_flag = DEL_FLAG_ACTIVE;
+
         $stmt = $db->prepare('SELECT * FROM users where email = :email '
-                . 'AND password = :password and del_flag=0');
+                . 'AND password = :password and del_flag= :del_flag');
+
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
         $stmt->bindParam(':password', $password, PDO::PARAM_STR);
+        $stmt->bindParam(':del_flag', $del_flag, PDO::PARAM_INT);
+
         $stmt->execute();
         $list = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         if (!empty($list)) {
-//            dd($list);
             return $list;
         } else {
-            return []; // Trả về mảng rỗng nếu không tìm thấy dữ liệu
+            return [];
         }
     }
 
@@ -250,7 +260,6 @@ class User {
         $stmt->execute();
 
         $result = $stmt->fetchAll();
-//        dd($result);
         if ($result) {
             return true;
         } else {
@@ -260,14 +269,20 @@ class User {
 
     public static function countUser($email, $name) {
         $db = DB::getInstance();
-        $stmt = $db->prepare('SELECT COUNT(ID) FROM users where email like :email and name like :name and del_flag = 0');
+        $del_flag = DEL_FLAG_ACTIVE;
+
+        $stmt = $db->prepare('SELECT COUNT(ID) FROM users where email like :email and name like :name and del_flag = :del_flag');
+
         $email = '%' . $email . '%';
         $name = '%' . $name . '%';
+
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
         $stmt->bindParam(':name', $name, PDO::PARAM_STR);
+        $stmt->bindParam(':del_flag', $del_flag, PDO::PARAM_INT);
+
         $stmt->execute();
         $count = $stmt->fetchColumn();
-//        dd($count);
+
         return $count;
     }
 

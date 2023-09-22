@@ -1,5 +1,7 @@
 <?php
 
+require_once 'helper/const.php';
+
 class Admin {
 
     public $id;
@@ -39,11 +41,14 @@ class Admin {
 
     static function checkAccount($email, $password) {
         $db = DB::getInstance();
+        $del_flag = DEL_FLAG_ACTIVE;
+
         $stmt = $db->prepare('SELECT email, password FROM admin WHERE '
-                . 'email = :email AND password = :password and del_flag = 0');
+                . 'email = :email AND password = :password and del_flag = :del_flag');
 
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
         $stmt->bindParam(':password', $password, PDO::PARAM_STR);
+        $stmt->bindParam(':del_flag', $del_flag, PDO::PARAM_INT);
         $stmt->execute();
 
         $result = $stmt->fetchAll();
@@ -58,17 +63,21 @@ class Admin {
     static function searchbyNameandEmail($email, $name, $start, $end) {
         $db = DB::getInstance();
         $list = [];
+        $del_flag = DEL_FLAG_ACTIVE;
+
         $stmt = $db->prepare('SELECT id, name, email, password, role_type, avatar,'
                 . 'del_flag FROM admin WHERE email LIKE :email AND name LIKE '
-                . ':name and del_flag =0  LIMIT  :start, :end');
+                . ':name and del_flag = :del_flag  LIMIT  :start, :end');
         $email = '%' . $email . '%';
         $name = '%' . $name . '%';
+
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
         $stmt->bindParam(':name', $name, PDO::PARAM_STR);
         $stmt->bindParam(':start', $start, PDO::PARAM_INT);
         $stmt->bindParam(':end', $end, PDO::PARAM_INT);
+        $stmt->bindParam(':del_flag', $del_flag, PDO::PARAM_INT);
         $stmt->execute();
-//        $list = $stmt->fetchAll();
+
         foreach ($stmt->fetchAll() as $item) {
             $list [] = [
                 'id' => $item['id'],
@@ -85,36 +94,44 @@ class Admin {
 
     static function countAdmin($email, $name) {
         $db = DB::getInstance();
-        $stmt = $db->prepare('SELECT COUNT(ID) FROM admin where email like :email and name like :name and del_flag = 0');
+        $del_flag = DEL_FLAG_ACTIVE;
+
+        $stmt = $db->prepare('SELECT COUNT(ID) FROM admin where email like :email '
+                . 'and name like :name and del_flag = :del_flag');
         $email = '%' . $email . '%';
         $name = '%' . $name . '%';
+
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
         $stmt->bindParam(':name', $name, PDO::PARAM_STR);
+        $stmt->bindParam(':del_flag', $del_flag, PDO::PARAM_INT);
         $stmt->execute();
         $count = $stmt->fetchColumn();
-//        dd($count);
+
         return $count;
     }
 
     public static function detailAdmin($id) {
         $db = DB::getInstance();
-        $stmt = $db->prepare('SELECT id,name,email,password,avatar,role_type from admin where id = :id');
+
+        $stmt = $db->prepare('SELECT id,name,email,password,avatar,'
+                . 'role_type from admin where id = :id');
+
         $stmt->bindParam(':id', $id, PDO::PARAM_STR);
         $stmt->execute();
         $list = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         if (!empty($list)) {
-//            dd($list);
             return $list;
         } else {
-            return []; 
+            return [];
         }
     }
 
     public static function editAdmin($admin = array()) {
         $db = DB::getInstance();
         $pass = md5($admin['password']);
-        $stmt = $db->prepare('UPDATE admin SET name = :name, email = :email, password = :password, avatar = :avatar, role_type = :role_type WHERE id = :id');
+        $stmt = $db->prepare('UPDATE admin SET name = :name, email = :email, '
+                . 'password = :password, avatar = :avatar, role_type = :role_type WHERE id = :id');
 
         $stmt->bindParam(':name', $admin['name'], PDO::PARAM_STR);
         $stmt->bindParam(':email', $admin['email'], PDO::PARAM_STR);
@@ -122,6 +139,7 @@ class Admin {
         $stmt->bindParam(':avatar', $admin['avatar'], PDO::PARAM_STR);
         $stmt->bindParam(':role_type', $admin['role_type'], PDO::PARAM_INT);
         $stmt->bindParam(':id', $admin['id'], PDO::PARAM_INT);
+
         if ($stmt->execute()) {
             return true;
         } else {
@@ -132,7 +150,8 @@ class Admin {
     public static function createNewAccount($account) {
         $db = DB::getInstance();
         $passwordmd5 = md5($account['password']);
-        $account['del_flag'] = 0;
+        $account['del_flag'] = DEL_FLAG_ACTIVE;
+
         $stmt = $db->prepare('INSERT INTO admin (name, email, password, avatar, role_type, del_flag)'
                 . 'VALUES (:name, :email, :password, :avatar, :role_type, :del_flag)');
         $stmt->bindParam(':name', $account['name'], PDO::PARAM_STR);
@@ -153,19 +172,17 @@ class Admin {
         $db = DB::getInstance();
         $stmt = $db->prepare('SELECT * '
                 . 'FROM admin '
-                . 'WHERE email = :email and del_flag = 0 and id != :id');
+                . 'WHERE email = :email and del_flag = :del_flag and id != :id');
+        $del_flag = DEL_FLAG_ACTIVE;
 
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->bindParam(':del_flag', $del_flag, PDO::PARAM_INT);
         $stmt->execute();
 
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($result > 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return $result > 0;
     }
 
     public static function deleteAdmin($id, $del_flag) {
@@ -174,7 +191,7 @@ class Admin {
 
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->bindParam(':del_flag', $del_flag, PDO::PARAM_INT);
-//        dd($stmt).'<br>';
+
         if ($stmt->execute()) {
             return true;
         } else {
@@ -192,39 +209,10 @@ class Admin {
         $list = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if (!empty($list)) {
-//            dd($list);
             return $list;
         } else {
-            return []; // Trả về mảng rỗng nếu không tìm thấy dữ liệu
+            return [];
         }
-    }
-
-    public static function checkUploadFile() {
-        if (isset($_FILES["avatar"]) && !$_FILES["avatar"]["error"]) {
-            $destinationPath = 'C:/xampp/htdocs/ProjectPHP/views/pages/media/' . $_FILES["avatar"]["name"];
-
-            // Kiểm tra nếu tệp là ảnh
-            $imageInfo = getimagesize($_FILES["avatar"]["tmp_name"]);
-            if ($imageInfo !== false) {
-                // Kiểm tra định dạng của ảnh (PNG hoặc không)
-                $imageMimeType = $imageInfo['mime'];
-                if ($imageMimeType === 'image/png' || $imageMimeType === 'image/jpeg' || $imageMimeType === 'image/jpg' || $imageMimeType === 'image/gif') {
-                    if (move_uploaded_file($_FILES["avatar"]["tmp_name"], $destinationPath)) {
-                        // Trả về tên tệp ảnh nếu thành công
-                        return $_FILES["avatar"]["name"];
-                    } else {
-                        echo "";
-                    }
-                } else {
-                    echo "";
-                }
-            } else {
-                echo "";
-            }
-        } else {
-            echo "";
-        }
-        return null;
     }
 
     public static function checkIdAdmin($id) {
@@ -235,11 +223,7 @@ class Admin {
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($result > 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return $result > 0;
     }
 
 }

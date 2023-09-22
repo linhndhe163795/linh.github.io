@@ -21,10 +21,10 @@
             <input type="text" class="form-control" name="id" readonly value='<?php echo isset($detail[0]['id']) ? $detail[0]['id'] : " " ?>'>
         </div>
         <div class="form-group">
-
-            <input type="file" class="form-control-file" maxlength="128" name="avatar"  >
             <label for="avatar">Avatar:</label>
-            <img  style="max-width: 70px; max-height: 70px;" src="/views/pages/media/<?php echo isset($detail[0]['avatar']) ? $detail[0]['avatar'] : "" ?>"/>
+            <input type="file" class="form-control-file" id="avatar_value" name="avatar" onchange="updateHiddenInput(this)">
+            <input type="hidden" name="avatar_value" id="avatar_value" >
+            <img style="max-width: 70px; max-height: 70px;" src="/views/pages/media/<?php echo isset($valid['avatar']) ? $valid['avatar'] : (isset($detail[0]['avatar']) ? $detail[0]['avatar'] : '') ?>"/>
             <div style="color: red"><?php echo isset($errors['avatar']) ? $errors['avatar'] : " " ?></div>
         </div>
         <div class="form-group">
@@ -39,12 +39,14 @@
         </div>
         <div class="form-group">
             <label for="password">Password:</label>
-            <input type="password" class="form-control"maxlength="100" minlength="3" name="password"  value=>
+            <input type="password" class="form-control"maxlength="100" minlength="3" name="password"  
+                   value="<?php echo isset($detail[0]['password']) ? $detail[0]['password'] : "" ?>">
         </div>
         <div style="color: red"><?php echo isset($errors['password']) ? $errors['password'] : " " ?></div>
         <div class="form-group">
             <label for="verifyPassword">Verify Password:</label>
-            <input type="password" class="form-control" maxlength="100" minlength="3" name="verifyPassword" value= >
+            <input type="password" class="form-control" maxlength="100" minlength="3" name="verifyPassword"
+                   value="<?php echo isset($detail[0]['password']) ? $detail[0]['password'] : "" ?>" >
             <div style="color: red"><?php echo isset($errors['verifyPassword']) ? $errors['verifyPassword'] : " " ?></div>
 
         </div>
@@ -77,5 +79,7 @@
 
 </div>
 </body>
+<script src="../../assets/js/edit.js"></script>
+
 </html>
 

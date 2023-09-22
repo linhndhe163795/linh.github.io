@@ -22,21 +22,21 @@
             <div class="row justify-content-center">
                 <div class="col-md-6">
                     <div class="card">
-                        <div class="card-header">Đăng nhập Admin</div>
+                        <div class="card-header">Login Admin</div>
                         <div class="card-body">
                             <form method="POST" action="/index.php?controller=login&action=dangnhap">
                                 <div class="form-group">
-                                    <label for="username">Tên đăng nhập</label>
+                                    <label for="username">User Name</label>
                                     <input type="email" class="form-control" id="username" name="email" value="<?php echo isset($valid['email']) ? $valid['email'] : "" ?>" >
                                     <div style="color: red"><?php echo isset($errors['email']) ? $errors['email'] : " " ?>
                                     </div>
                                     <div class="form-group">
-                                        <label for="password">Mật khẩu</label>
+                                        <label for="password">Password</label>
                                         <input type="password" class="form-control" id="password" name="password" >
                                         <div style="color: red"><?php echo isset($errors['password']) ? $errors['password'] : " " ?>
                                         </div>
                                         <div>
-                                            <button type="submit" class="btn btn-primary"name="submit">Đăng nhập</button>
+                                            <button type="submit" class="btn btn-primary"name="submit">Login</button>
                                         </div>
                                         <div  style="color: red"> <?php echo isset($messages) ? $messages : "" ?></div>
                                     </div>
