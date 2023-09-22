@@ -1,14 +1,8 @@
 <?php require_once './helper/common.php'; ?>
+<?php require_once './helper/const.php'; ?>
 
 
-
-<style>
-    .container {
-        max-width: 500px;
-        margin: 0 auto;
-        padding: 20px;
-    }
-</style>
+<link href="../../assets/css/edit.css">
 <title>Admin_Edit</title>
 <?php include 'header.php'; ?>
 
@@ -29,23 +23,23 @@
         </div>
         <div class="form-group">
             <label for="name">Name:</label>
-            <input type="text" class="form-control" maxlength="100" minlength="3" name="name" value="<?php echo isset($valid['name']) ? $valid['name'] : $detail[0]['name'] ?>" >
+            <input type="text" class="form-control"  name="name" value="<?php echo isset($valid['name']) ? $valid['name'] : $detail[0]['name'] ?>" >
             <div style="color: red"><?php echo isset($errors['name']) ? $errors['name'] : " " ?></div>
         </div>
         <div class="form-group">
             <label for="email">Email:</label>
-            <input type="text" class="form-control"  maxlength="100" minlength="3" name="email" value='<?php echo isset($valid['email']) ? $valid['email'] : $detail[0]['email'] ?>' >
+            <input type="text" class="form-control" name="email" value='<?php echo isset($valid['email']) ? $valid['email'] : $detail[0]['email'] ?>' >
             <div style="color: red"><?php echo isset($errors['email']) ? $errors['email'] : " " ?></div>
         </div>
         <div class="form-group">
             <label for="password">Password:</label>
-            <input type="password" class="form-control"maxlength="100" minlength="3" name="password"  
+            <input type="password" class="form-control" name="password"  
                    value="<?php echo isset($detail[0]['password']) ? $detail[0]['password'] : "" ?>">
         </div>
         <div style="color: red"><?php echo isset($errors['password']) ? $errors['password'] : " " ?></div>
         <div class="form-group">
             <label for="verifyPassword">Verify Password:</label>
-            <input type="password" class="form-control" maxlength="100" minlength="3" name="verifyPassword"
+            <input type="password" class="form-control" name="verifyPassword"
                    value="<?php echo isset($detail[0]['password']) ? $detail[0]['password'] : "" ?>" >
             <div style="color: red"><?php echo isset($errors['verifyPassword']) ? $errors['verifyPassword'] : " " ?></div>
 
@@ -54,22 +48,22 @@
             <label for="active">Status:</label>
             <div>
                 <?php
-                $superAdminChecked = (isset($detail[0]['role_type']) && $detail[0]['role_type'] == 1) ? 'checked' : '';
-                $adminChecked = (isset($detail[0]['role_type']) && $detail[0]['role_type'] == 2) ? 'checked' : '';
+                $superAdminChecked = (isset($detail[0]['role_type']) && $detail[0]['role_type'] == SUPER_ADMIN) ? 'checked' : '';
+                $adminChecked = (isset($detail[0]['role_type']) && $detail[0]['role_type'] == ADMIN) ? 'checked' : '';
 
-                if (isset($valid['role_type']) && $valid['role_type'] == 1) {
+                if (isset($valid['role_type']) && $valid['role_type'] == SUPER_ADMIN) {
                     $superAdminChecked = 'checked';
                 }
-                if (isset($valid['role_type']) && $valid['role_type'] == 2) {
+                if (isset($valid['role_type']) && $valid['role_type'] == ADMIN) {
                     $adminChecked = 'checked';
                 }
                 ?>
 
                 <label class="radio-inline">
-                    <input <?= $superAdminChecked ?> type="radio" name="role_type" value="1">Super Admin
+                    <input <?= $superAdminChecked ?> type="radio" name="role_type" value="<?php echo SUPER_ADMIN ?>">Super Admin
                 </label>
                 <label class="radio-inline">
-                    <input <?= $adminChecked ?> type="radio" name="role_type" value="2">Admin
+                    <input <?= $adminChecked ?> type="radio" name="role_type" value="<?php echo ADMIN ?>">Admin
                 </label>
             </div>
         </div>

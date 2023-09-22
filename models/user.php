@@ -137,7 +137,7 @@ class User {
         $stmt = $db->prepare('SELECT id , avatar, name, email, status,del_flag  '
                 . 'FROM users WHERE email LIKE :email AND name LIKE :name and '
                 . 'del_flag = :del_flag LIMIT  :start, :end');
-        
+
         $email = '%' . $email . '%';
         $name = '%' . $name . '%';
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
@@ -146,7 +146,7 @@ class User {
         $stmt->bindParam(':end', $end, PDO::PARAM_INT);
         $stmt->bindParam(':del_flag', $del_flag, PDO::PARAM_INT);
         $stmt->execute();
-        
+
         foreach ($stmt->fetchAll() as $item) {
             $list [] = [
                 'id' => $item['id'],
@@ -165,14 +165,14 @@ class User {
         $password = md5($user['password']);
         $stmt = $db->prepare('UPDATE users SET avatar = :avatar , name = :name,'
                 . 'email = :email, password = :password, status = :status where id = :id');
-        
+
         $stmt->bindParam(':avatar', $user['avatar'], PDO::PARAM_STR);
         $stmt->bindParam(':name', $user['name'], PDO::PARAM_STR);
         $stmt->bindParam(':email', $user['email'], PDO::PARAM_STR);
         $stmt->bindParam(':password', $password, PDO::PARAM_STR);
         $stmt->bindParam(':status', $user['active'], PDO::PARAM_INT);
         $stmt->bindParam(':id', $user['id'], PDO::PARAM_INT);
-        
+
         if ($stmt->execute()) {
             return true;
         } else {
@@ -184,10 +184,10 @@ class User {
         $db = DB::getInstance();
         $stmt = $db->prepare('SELECT id,avatar,name,email,password,status from users where id = :id ');
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        
+
         $stmt->execute();
         $list = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        
+
         if (!empty($list)) {
             return $list;
         } else {
@@ -252,11 +252,13 @@ class User {
 
     public static function checkAccount($email, $password) {
         $db = DB::getInstance();
+        $del_flag = DEL_FLAG_ACTIVE;
         $stmt = $db->prepare('SELECT email, password FROM users WHERE '
-                . 'email = :email AND password = :password and del_flag = 0');
+                . 'email = :email AND password = :password and del_flag = :del_flag');
 
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
         $stmt->bindParam(':password', $password, PDO::PARAM_STR);
+        $stmt->bindParam(':del_flag', $del_flag, PDO::PARAM_INT);
         $stmt->execute();
 
         $result = $stmt->fetchAll();
@@ -284,6 +286,21 @@ class User {
         $count = $stmt->fetchColumn();
 
         return $count;
+    }
+
+    public static function checkIdUser($id) {
+        $db = DB::getInstance();
+        $del_flag = DEL_FLAG_ACTIVE;
+        $stmt = $db->prepare('SELECT id from users where id = :id and del_flag = :del_flag');
+
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->bindParam(':del_flag', $del_flag, PDO::PARAM_INT);
+
+        $stmt->execute();
+
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $result > 0;
     }
 
 }

@@ -1,13 +1,8 @@
 
 
-<style>
-    .container {
-        max-width: 500px;
-        margin: 0 auto;
-        padding: 20px;
-    }
-</style>
 <?php include 'header.php'; ?>
+<link href="../../assets/css/edit.css">
+<?php require_once './helper/const.php'; ?>
 <div class="container">
     <form action="index.php?controller=edit&action=editUser&id=<?php echo $detail[0]['id']; ?>"
           method="POST" enctype="multipart/form-data">
@@ -25,7 +20,7 @@
         </div>
         <div class="form-group">
             <label for="name">Name:</label>
-            <input type="text" class="form-control" maxlength="128" name="name" value="<?php echo isset($valid['name']) ? $valid['name'] : $detail[0]['name'] ?>"  >
+            <input type="text" class="form-control"  name="name" value="<?php echo isset($valid['name']) ? $valid['name'] : $detail[0]['name'] ?>"  >
             <div style="color: red"><?php echo isset($errors['name']) ? $errors['name'] : " " ?></div>
 
         </div>
@@ -37,7 +32,7 @@
         </div>
         <div class="form-group">
             <label for="password">Password:</label>
-            <input type="password" class="form-control" maxlength="100" minlength="3" name="password"
+            <input type="password" class="form-control"  name="password"
                    value="<?php echo isset($detail[0]['password']) ? $detail[0]['password'] : "" ?>">
             <div style="color: red"><?php echo isset($errors['password']) ? $errors['password'] : " " ?></div>
 
@@ -49,28 +44,29 @@
             <div style="color: red"><?php echo isset($errors['verifyPassword']) ? $errors['verifyPassword'] : " " ?></div>
 
         </div>
+        <input type="hidden" class="form-control" maxlength="100" minlength="3" name="role_type" value="<?php echo ADMIN ?>">
         <div class="form-group">
             <label for="active">Status:</label>
             <div>
                 <?php
-                $activeChecked = (isset($detail[0]['status']) && $detail[0]['status'] == 1) ? 'checked' : '';
-                $bannedChecked = (isset($detail[0]['status']) && $detail[0]['status'] == 0) ? 'checked' : '';
+                $activeChecked = (isset($detail[0]['status']) && $detail[0]['status'] == ACTIVE) ? 'checked' : '';
+                $bannedChecked = (isset($detail[0]['status']) && $detail[0]['status'] == BAN) ? 'checked' : '';
 
-                if (isset($valid['active']) && $valid['active'] == 1) {
+                if (isset($valid['active']) && $valid['active'] == ACTIVE) {
                     $activeChecked = 'checked';
                 }
-                if (isset($valid['active']) && $valid['active'] == 0) {
+                if (isset($valid['active']) && $valid['active'] == BAN) {
                     $bannedChecked = 'checked';
                 }
                 ?>
 
                 <label class="radio-inline">
-                    <input <?= $activeChecked ?> type="radio" name="active" value="1">Active
+                    <input <?= $activeChecked ?> type="radio" name="active" value="<?php echo ACTIVE ?>">Active
                 </label>
                 <label class="radio-inline">
-                    <input <?= $bannedChecked ?> type="radio" name="active" value="0">Banned
+                    <input <?= $bannedChecked ?> type="radio" name="active" value="<?php echo BAN ?>">Banned
                 </label>
-
+                <div style="color: red"><?php echo isset($errors['verifyPassword']) ? $errors['verifyPassword'] : " " ?></div>
             </div>
         </div>
         <button type="reset" name = 'reset'class="btn btn-secondary">Reset</button>

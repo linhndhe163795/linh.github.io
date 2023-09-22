@@ -47,11 +47,10 @@ class SearchController extends BaseController {
                 ($_SESSION['role_type']) == ADMIN) {
             $email = '';
             $name = '';
-//            if (isset($_GET['search'])) {
             $email = isset($_GET['email']) ? $_GET['email'] : '';
             $name = isset($_GET['name']) ? $_GET['name'] : '';
 
-            isset($_GET['page']) ? $page = $_GET['page'] : $page = 1;
+            isset($_GET['page']) ? $page = $_GET['page'] : $page = DEFAULT_PAGE;
             $end = PAGING;
             $start = ($page - 1) * $end;
 

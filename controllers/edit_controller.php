@@ -9,7 +9,6 @@ require_once 'helper/const.php';
 
 session_start();
 
-
 class EditController extends BaseController {
 
     function __construct() {
@@ -48,6 +47,7 @@ class EditController extends BaseController {
                     $_POST['avatar'] = $previousAvatar;
                 }
                 $validate = Validation::validateInput($_POST);
+
                 $validateImage = Validation::validateImageForEdit($_POST);
                 if ($validate['status'] && $validateImage['status']) {
                     Admin::editAdmin($_POST);
@@ -56,7 +56,6 @@ class EditController extends BaseController {
                         'messages' => 'Edit account successfully'
                     ]);
                 } else {
-                    dd($validate);
                     $this->render("edit", [
                         'errors' => $validate['messages'],
                         'valid' => $validate['valid'],
@@ -87,7 +86,7 @@ class EditController extends BaseController {
             }
         } else {
             $this->render("error");
-             header("Refresh: 3; index.php?controller=login&action=userlogin");
+            header("Refresh: 3; index.php?controller=login&action=userlogin");
         }
     }
 
@@ -95,7 +94,17 @@ class EditController extends BaseController {
         if (isset($_SESSION['role_type']) && ($_SESSION['role_type']) == SUPER_ADMIN ||
                 isset($_SESSION['role_type']) == ADMIN) {
             $detailUser = User::detailUser($_GET['id']);
-            $this->render("edituser", array('detail' => $detailUser));
+            if (isset($_GET['id'])) {
+                $id = $_GET['id'];
+                $checkId = User::checkIdUser($id);
+                if (!$checkId) {
+                    echo 'ID không hợp lệ';
+                    header("Refresh: 3; index.php?controller=search&action=searchUser");
+                    exit();
+                } else {
+                    $this->render("edituser", array('detail' => $detailUser));
+                }
+            }
         } else {
             $this->render("error");
         }
@@ -123,6 +132,7 @@ class EditController extends BaseController {
                         'messages' => 'Edit account successfully'
                     ]);
                 } else {
+                     echo'fail';
                     $this->render("edituser", [
                         'errors' => $validate['messages'],
                         'valid' => $validate['valid'],

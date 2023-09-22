@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<?php require_once './helper/const.php'; ?>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -38,7 +39,7 @@
                         <li class="nav-item">
                             <a class="nav-link" href="#">Admin Management</a>
                             <?php
-                            if (isset($_SESSION['role_type']) && $_SESSION['role_type'] == 1) {
+                            if (isset($_SESSION['role_type']) && $_SESSION['role_type'] == SUPER_ADMIN) {
                                 echo '<div class="sub-menu">';
                                 echo '<a href="/index.php?controller=create&action=createAdmin">Create</a>';
                                 echo '<a href="/index.php?controller=search&action=searchAdmin">Search</a>';

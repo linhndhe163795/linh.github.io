@@ -14,7 +14,7 @@ class Validation {
             'status' => false,
             'messages' => []
         ];
-
+        $data['id'] = isset($data['id']) ? $data['id'] : "";
         if (empty($data['name'])) {
             //Truyền lại giá trị vừa nhập
             $result['valid']['avatar'] = $data['avatar'];
@@ -23,8 +23,16 @@ class Validation {
             isset($data['role_type']) ? $result['valid']['role_type'] = $data['role_type'] : "";
             isset($data['active']) ? $result['valid']['active'] = $data['active'] : "";
 
-
             $result['messages']['name'] = 'Name can not be blank.';
+            //kiểm tra độ dài 
+        } else if (strlen($data['name']) > MAX_LENGTH || strlen($data['name']) < MIN_LENGTH) {
+            $result['valid']['avatar'] = $data['avatar'];
+            $result['valid']['name'] = $data['name'];
+            $result['valid']['email'] = $data['email'];
+            isset($data['role_type']) ? $result['valid']['role_type'] = $data['role_type'] : "";
+            isset($data['active']) ? $result['valid']['active'] = $data['active'] : "";
+
+            $result['messages']['name'] = 'Greater than 3 characters and not exceeding 128 characters.';
         }
 
         if (empty($data['email'])) {
@@ -36,6 +44,7 @@ class Validation {
             isset($data['active']) ? $result['valid']['active'] = $data['active'] : "";
 
             $result['messages']['email'] = 'Email can not be blank.';
+            //kiểm tra định dạng
         } else if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
 
             //Truyền lại giá trị vừa nhập
@@ -46,6 +55,7 @@ class Validation {
             isset($data['active']) ? $result['valid']['active'] = $data['active'] : "";
 
             $result['messages']['email'] = 'Email is invalid';
+            //kiểm tra email tồn tại trong database
         } else if (Admin::checkDuplicateEmail($data['email'], $data['id'])) {
             //Truyền lại giá trị vừa nhập
             $result['valid']['avatar'] = $data['avatar'];
@@ -55,6 +65,15 @@ class Validation {
             isset($data['active']) ? $result['valid']['active'] = $data['active'] : "";
 
             $result['messages']['email'] = 'Email is exist';
+            //kiểm tra độ dài của email
+        } else if (strlen($data['email']) > MAX_LENGTH || strlen($data['email']) < MIN_LENGTH) {
+            $result['valid']['avatar'] = $data['avatar'];
+            $result['valid']['name'] = $data['name'];
+            $result['valid']['email'] = $data['email'];
+            isset($data['role_type']) ? $result['valid']['role_type'] = $data['role_type'] : "";
+            isset($data['active']) ? $result['valid']['active'] = $data['active'] : "";
+
+            $result['messages']['email'] = 'Greater than 3 characters and not exceeding 128 characters.';
         }
 
         if (empty($data['password'])) {
@@ -66,7 +85,16 @@ class Validation {
             isset($data['active']) ? $result['valid']['active'] = $data['active'] : "";
 
             $result['messages']['password'] = 'Password can not be blank';
+        } else if (strlen($data['password']) > MAX_LENGTH_PASSWORD || strlen($data['password']) < MIN_LENGTH) {
+            $result['valid']['avatar'] = $data['avatar'];
+            $result['valid']['name'] = $data['name'];
+            $result['valid']['email'] = $data['email'];
+            isset($data['role_type']) ? $result['valid']['role_type'] = $data['role_type'] : "";
+            isset($data['active']) ? $result['valid']['active'] = $data['active'] : "";
+
+            $result['messages']['password'] = 'Greater than 3 characters and not exceeding 100 characters.';
         }
+
 
         if (empty($data['verifyPassword'])) {
             //Truyền lại giá trị vừa nhập
@@ -90,7 +118,7 @@ class Validation {
             $result['messages']['password'] = 'Password not match';
         }
 
-        if (isset($data['role_type']) && empty($data['role_type'])) {
+        if (empty($data['role_type'])) {
             //Truyền lại giá trị vừa nhập
             $result['valid']['avatar'] = $data['avatar'];
             isset($data['role_type']) ? $result['valid']['role_type'] = $data['role_type'] : "";
@@ -99,6 +127,9 @@ class Validation {
 
             $result['messages']['role_type'] = "Choose Role_Type";
         }
+
+
+
 
         if (empty($result['messages'])) {
             $result['status'] = true;
@@ -201,7 +232,6 @@ class Validation {
             'messages' => []
         ];
         $data['avatar'] = Validation::checkUploadFileForCreate();
-        dd($data['avatar']);
         if (!$data['avatar']) {
             //Truyền lại giá trị vừa nhập
             $result['valid']['email'] = $data['email'];

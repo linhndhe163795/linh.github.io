@@ -9,10 +9,11 @@
 </style>
 <title>User - Search</title>
 <?php
+require_once './helper/const.php';
 include 'header.php';
 ?>
 <div class="container">
-    <h2>Form Tìm Kiếm</h2>
+    <h2>Form Sreach</h2>
     <form action="/index.php?controller=search&action=searchUser" method="get">
         <input type="hidden" name="controller" value="search" />
         <input type="hidden" name="action" value="searchUser" />
@@ -22,13 +23,13 @@ include 'header.php';
                 <span class="input-group-text" id="inputGroup-sizing-sm">Email</span>
             </div>
             <input type="text" class="form-control" aria-label="Small" 
-                   aria-describedby="inputGroup-sizing-sm" id="email" name="email" placeholder="Nhập địa chỉ email" value="<?php echo isset($email) ? $email : "" ?>">
+                   aria-describedby="inputGroup-sizing-sm" id="email" name="email" placeholder="Input email" value="<?php echo isset($email) ? $email : "" ?>">
         </div>
         <div class="input-group input-group-lg mb-3">
             <div class="input-group-prepend">
                 <span class="input-group-text" id="inputGroup-sizing-sm"> Name</span>
             </div>
-            <input type="text" id="name" name="name" placeholder="Nhập tên" 
+            <input type="text" id="name" name="name" placeholder="Input name" 
                    class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" value="<?php echo isset($name) ? $name : "" ?>">
         </div>
         <button type="submit" name="searchuser" class="btn btn-primary">Search</button>
@@ -47,7 +48,6 @@ include 'header.php';
                 <th>Email</th>
                 <th >Status</th>
                 <th>Action</th>
-                <!--<th hidden=""></th>-->
             </tr>
         </thead>   
         <tbody>
@@ -59,9 +59,9 @@ include 'header.php';
                     echo '<td><img alt="123" style="max-height: 100px; max-width: 100px" src="/views/pages/media/' . $row['avatar'] . '"></td>';
                     echo '<td>' . $row['name'] . '</td>';
                     echo '<td>' . $row['email'] . '</td>';
-                    if ($row['status'] == 1)
+                    if ($row['status'] == ACTIVE)
                         echo '<td> Active </td>';
-                    if ($row['status'] == 0)
+                    if ($row['status'] == BAN)
                         echo '<td> Banned </td>';
                     echo '<td style="display:inline"><a href="index.php?controller=edit&action=loadDataEdit&id=' . $row['id'] . '"><button class="btn btn-success">Edit</button></a>';
                     echo
@@ -72,7 +72,7 @@ include 'header.php';
                     '</form>';
                     echo '</tr>';
                 }
-            } 
+            }
             ?>
 
         </tbody>
@@ -84,7 +84,7 @@ include 'header.php';
         $currentPage = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 
         // Số trang trước và sau bạn muốn hiển thị
-        $numPagesToShow = 2;
+        $numPagesToShow = NUMBER_PAGE_TO_SHOW;
 
         echo '<nav aria-label="Page navigation example">';
         echo '<ul class="pagination">';
@@ -157,15 +157,15 @@ include 'header.php';
 <script src="../../assets/js/dataTables.bootstrap.min.js"></script>
 
 <script>
-    $(function () {
-        $('#example2').DataTable({
-            "paging": false,
-            "lengthChange": true,
-            "searching": false,
-            "ordering": true,
-            "info": false,
-            "autoWidth": false
-        });
-    });
+            $(function () {
+                $('#example2').DataTable({
+                    "paging": false,
+                    "lengthChange": true,
+                    "searching": false,
+                    "ordering": true,
+                    "info": false,
+                    "autoWidth": false
+                });
+            });
 </script>
 </html>

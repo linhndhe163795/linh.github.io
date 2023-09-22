@@ -1,6 +1,6 @@
 
 
-
+<?php require_once './helper/const.php'; ?>
 <?php include 'header.php'; ?>
 
 <title>Admin - Create</title>
@@ -28,37 +28,37 @@
             </div>
             <div class="form-group">
                 <label for="name">Name:</label>
-                <input type="text" class="form-control" name="name" maxlength="128" value="<?php echo isset($valid['name']) ? $valid['name'] : "" ?>"  >
+                <input type="text" class="form-control" name="name"  value="<?php echo isset($valid['name']) ? $valid['name'] : "" ?>"  >
                 <div style="color: red"><?php echo isset($errors['name']) ? $errors['name'] : "" ?></div>
             </div>
             <div class="form-group">
                 <label for="email">Email:</label>
-                <input type="email" class="form-control" name="email"  maxlength="128" value="<?php echo isset($valid['email']) ? $valid['email'] : "" ?>" >
+                <input type="email" class="form-control" name="email"   value="<?php echo isset($valid['email']) ? $valid['email'] : "" ?>" >
                 <div style="color: red"><?php echo isset($errors['email']) ? $errors['email'] : "" ?></div>
             </div>
             <div class="form-group">
                 <label for="password">Password:</label>
-                <input type="password" class="form-control" maxlength="100" minlength="3" name="password" >
+                <input type="password" class="form-control" name="password" >
                 <div style="color: red"><?php echo isset($errors['password']) ? $errors['password'] : "" ?></div>
             </div>
             <div class="form-group">
                 <label for="verifyPassword">Verify Password:</label>
-                <input type="password" class="form-control" maxlength="100" minlength="3" name="verifyPassword" >
+                <input type="password" class="form-control" name="verifyPassword" >
                 <div style="color: red"><?php echo isset($errors['verifyPassword']) ? $errors['verifyPassword'] : "" ?></div>
             </div>
             <div class="form-group">
                 <label for="active">Role:</label>
                 <div>
                     <?php
-                    $superAdminChecked = (isset($valid['role_type']) && $valid['role_type'] == 1) ? 'checked' : '';
-                    $adminChecked = (isset($valid['role_type']) && $valid['role_type'] == 2) ? 'checked' : '';
+                    $superAdminChecked = (isset($valid['role_type']) && $valid['role_type'] == SUPER_ADMIN) ? 'checked' : '';
+                    $adminChecked = (isset($valid['role_type']) && $valid['role_type'] == ADMIN) ? 'checked' : '';
                     ?>
 
                     <label class="radio-inline">
-                        <input <?= $superAdminChecked ?> type="radio" name="role_type" value="1">Super Admin
+                        <input <?= $superAdminChecked ?> type="radio" name="role_type" value="<?php echo SUPER_ADMIN ?>">Super Admin
                     </label>
                     <label class="radio-inline">
-                        <input <?= $adminChecked ?> type="radio" name="role_type" value="2">Admin
+                        <input <?= $adminChecked ?> type="radio" name="role_type" value="<?php echo ADMIN ?>">Admin
                     </label>
 
                     <div style = "color: red"><?php echo isset($errors['role_type']) ? $errors['role_type'] : ""

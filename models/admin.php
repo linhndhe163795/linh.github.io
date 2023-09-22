@@ -30,15 +30,6 @@ class Admin {
         $this->del_flag = $del_flag;
     }
 
-//    function MethodEditAdmin($id, $name, $password, $email, $avatar, $del_flag) {
-//        $this->id = $id;
-//        $this->name = $name;
-//        $this->password = $password;
-//        $this->email = $email;
-//        $this->avatar = $avatar;
-//        $this->del_flag = $del_flag;
-//    }
-
     static function checkAccount($email, $password) {
         $db = DB::getInstance();
         $del_flag = DEL_FLAG_ACTIVE;
@@ -52,12 +43,8 @@ class Admin {
         $stmt->execute();
 
         $result = $stmt->fetchAll();
-//        dd($result);
-        if ($result) {
-            return true;
-        } else {
-            return false;
-        }
+
+        return $result ? true : false;
     }
 
     static function searchbyNameandEmail($email, $name, $start, $end) {
@@ -200,11 +187,14 @@ class Admin {
     }
 
     public static function getInfor($email, $password) {
+
         $db = DB::getInstance();
+        $del_flag = DEL_FLAG_ACTIVE;
         $stmt = $db->prepare('SELECT * FROM admin where email = :email '
-                . 'AND password = :password and del_flag=0');
+                . 'AND password = :password and del_flag= :del_flag');
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
         $stmt->bindParam(':password', $password, PDO::PARAM_STR);
+        $stmt->bindParam(':del_flag', $del_flag, PDO::PARAM_INT);
         $stmt->execute();
         $list = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -217,9 +207,12 @@ class Admin {
 
     public static function checkIdAdmin($id) {
         $db = DB::getInstance();
+        $del_flag = DEL_FLAG_ACTIVE;
+        
         $stmt = $db->prepare('SELECT id FROM admin '
-                . 'where id = :id');
+                . 'where id = :id and del_flag = :del_flag');
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->bindParam(':del_flag', $del_flag, PDO::PARAM_INT);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
