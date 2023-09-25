@@ -1,6 +1,7 @@
 <?php
 
 require_once 'models/admin.php';
+require_once 'models/user.php';
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -66,7 +67,16 @@ class Validation {
 
             $result['messages']['email'] = 'Email is exist';
             //kiểm tra độ dài của email
-        } else if (strlen($data['email']) > MAX_LENGTH || strlen($data['email']) < MIN_LENGTH) {
+        } else if (User::checkDuplicateEmail($data['email'], $data['id'])) {
+            //Truyền lại giá trị vừa nhập
+            $result['valid']['avatar'] = $data['avatar'];
+            $result['valid']['name'] = $data['name'];
+            $result['valid']['email'] = $data['email'];
+            isset($data['role_type']) ? $result['valid']['role_type'] = $data['role_type'] : "";
+            isset($data['active']) ? $result['valid']['active'] = $data['active'] : "";
+
+            $result['messages']['email'] = 'Email is exist';
+        }else if (strlen($data['email']) > MAX_LENGTH || strlen($data['email']) < MIN_LENGTH) {
             $result['valid']['avatar'] = $data['avatar'];
             $result['valid']['name'] = $data['name'];
             $result['valid']['email'] = $data['email'];
