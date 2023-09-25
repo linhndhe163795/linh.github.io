@@ -28,12 +28,18 @@
             </div>
             <div class="form-group">
                 <label for="name">Name:</label>
-                <input type="text" class="form-control" name="name"  value="<?php echo isset($valid['name']) ? $valid['name'] : "" ?>"  >
+                <input type="text" class="form-control" name="name" 
+                       value="<?php echo isset($valid['name']) ? $valid['name'] :
+                                        (isset($validImage['name']) ? $validImage['name'] : "");
+                                ?>">
                 <div style="color: red"><?php echo isset($errors['name']) ? $errors['name'] : "" ?></div>
             </div>
             <div class="form-group">
                 <label for="email">Email:</label>
-                <input type="email" class="form-control" name="email"   value="<?php echo isset($valid['email']) ? $valid['email'] : "" ?>" >
+                <input type="email" class="form-control" name="email"   
+                       value="<?php echo isset($valid['email']) ? $valid['email'] :
+                               (isset($validImage['email']) ? $validImage['email'] : "");
+                                ?>">
                 <div style="color: red"><?php echo isset($errors['email']) ? $errors['email'] : "" ?></div>
             </div>
             <div class="form-group">

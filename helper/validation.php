@@ -214,20 +214,21 @@ class Validation {
     static function checkUploadFileForCreate() {
         $currentFile = __FILE__;
         $currentDirectory = dirname($currentFile);
-
         if (!isset($_FILES["avatar"]) || $_FILES["avatar"]["error"]) {
-            return isset($_SESSION['previousAvatar']) ? $_SESSION['previousAvatar'] : NULL;
+            return isset($_SESSION['previousAvatar']) ? $_SESSION['previousAvatar'] : "";
         }
 
         $destinationPath = $currentDirectory . '/../views/pages/media/' . $_FILES["avatar"]["name"];
 
         $imageInfo = getimagesize($_FILES["avatar"]["tmp_name"]);
         if ($imageInfo == false) {
+            unset($_SESSION['previousAvatar']);
             return;
         }
 
         $imageMimeType = $imageInfo['mime'];
         if (!in_array($imageMimeType, ['image/png', 'image/gif', 'image/jpg', 'image/jpeg'])) {
+            unset($_SESSION['previousAvatar']);
             return;
         }
 

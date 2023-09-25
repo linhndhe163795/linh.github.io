@@ -8,8 +8,6 @@ require_once 'helper/const.php';
 
 session_start();
 
-
-
 class CreateController extends BaseController {
 
     function __construct() {
@@ -36,8 +34,7 @@ class CreateController extends BaseController {
                 $validate = Validation::validateInput($_POST);
                 $validateImage = Validation::validateImageForCreate($_POST);
                 // step 2 @ok => save / @fail => show errors
-                if ($validate['status']&& $validateImage['status']) {
-
+                if ($validate['status'] && $validateImage['status']) {
                     Admin::createNewAccount($_POST);
                     unset($_SESSION['previousAvatar']);
                     $this->render("search", [
@@ -47,7 +44,8 @@ class CreateController extends BaseController {
                     $this->render("create", [
                         'errors' => $validate['messages'],
                         'errorsImage' => $validateImage['messages'],
-                        'valid' => $validate['valid']
+                        'valid' => isset($validate['valid']) ? $validate['valid'] : "",
+                        'validImage' => isset($validateImage['valid']) ? $validateImage['valid'] : "",
                     ]);
                 }
             } else {
