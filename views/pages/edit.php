@@ -19,7 +19,7 @@
             <input type="file" class="form-control-file" id="avatar_value" name="avatar" onchange="updateHiddenInput(this)">
             <input type="hidden" name="avatar_value" id="avatar_value" >
             <img style="max-width: 70px; max-height: 70px;" src="/views/pages/media/<?php echo isset($valid['avatar']) ? $valid['avatar'] : (isset($detail[0]['avatar']) ? $detail[0]['avatar'] : '') ?>"/>
-            <div style="color: red"><?php echo isset($errors['avatar']) ? $errors['avatar'] : " " ?></div>
+            <div style="color: red"><?php echo isset($errorsImage['avatar']) ? $errorsImage['avatar'] : " " ?></div>
         </div>
         <div class="form-group">
             <label for="name">Name:</label>

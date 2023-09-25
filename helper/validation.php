@@ -76,7 +76,7 @@ class Validation {
             isset($data['active']) ? $result['valid']['active'] = $data['active'] : "";
 
             $result['messages']['email'] = 'Email is exist';
-        }else if (strlen($data['email']) > MAX_LENGTH || strlen($data['email']) < MIN_LENGTH) {
+        } else if (strlen($data['email']) > MAX_LENGTH || strlen($data['email']) < MIN_LENGTH) {
             $result['valid']['avatar'] = $data['avatar'];
             $result['valid']['name'] = $data['name'];
             $result['valid']['email'] = $data['email'];
@@ -138,36 +138,43 @@ class Validation {
             $result['messages']['role_type'] = "Choose Role_Type";
         }
 
-
-
-
         if (empty($result['messages'])) {
             $result['status'] = true;
         }
         return $result;
     }
 
-    static function checkUploadFileForEdit($data, $detail) {
+    static function checkUploadFileForEdit($id) {
         $currentFile = __FILE__;
         $currentDirectory = dirname($currentFile);
 
+        $detailsAdmin = Admin::detailAdmin($id);
+        $detailsUser = User::detailUser($id);
+
+        if (empty($detailsAdmin)) {
+            $details = $detailsUser;
+        } else if (empty($detailsUser)) {
+            $details = $detailsAdmin;
+        }
         if (!isset($_FILES["avatar"]) || $_FILES["avatar"]["error"]) {
             // Người dùng không chọn tệp ảnh mới hoặc có lỗi, sử dụng ảnh cũ
-            return isset($detail[0]['avatar']) ? $detail[0]['avatar'] : $data['avatar'];
+            return isset($_SESSION['previousAvatar']) ? $_SESSION['previousAvatar'] : $details[0]['avatar'];
         }
 
         $destinationPath = $currentDirectory . '/../views/pages/media/' . $_FILES["avatar"]["name"];
 
         $imageInfo = getimagesize($_FILES["avatar"]["tmp_name"]);
         if ($imageInfo == false) {
-            // Kiểm tra không phải là hình ảnh hợp lệ
-            return $data['avatar'];
+            unset($_SESSION['previousAvatar']);
+
+            return;
         }
 
         $imageMimeType = $imageInfo['mime'];
         if (!in_array($imageMimeType, ['image/png', 'image/gif', 'image/jpg', 'image/jpeg'])) {
             // Kiểm tra không phải là định dạng hình ảnh hợp lệ
-            return $data['avatar'];
+            unset($_SESSION['previousAvatar']);
+            return $details[0]['avatar'];
         }
 
         if (move_uploaded_file($_FILES["avatar"]["tmp_name"], $destinationPath)) {
@@ -176,7 +183,7 @@ class Validation {
         }
 
         // Trả về giá trị mặc định nếu có lỗi khi tải lên
-        return $data['avatar'];
+        return $details[0]['avatar'];
     }
 
     static function validateImageForEdit($data) {
@@ -187,14 +194,9 @@ class Validation {
         $data['id'] = isset($data['id']) ? $data['id'] : "";
         $detailsAdmin = Admin::detailAdmin($data['id']);
         $detailsUser = User::detailUser($data['id']);
-//        $id = isset($detailsAdmim) ? $detailsAdmim : isset($detailsUser) ? $detailsUser : NULL;
-        if (empty($detailsAdmin)) {
-            $id = $detailsUser;
-        } else if (empty($detailsUser)) {
-            $id = $detailsAdmin;
-        }
-        $avatar = Validation::checkUploadFileForEdit($data['avatar'], $id);
-        if (!$avatar) {
+
+        $avatar = Validation::checkUploadFileForEdit($data['id']);
+        if (!$avatar || empty($data['avatar'])) {
             //Truyền lại giá trị vừa nhập
             $result['valid']['email'] = $data['email'];
             $result['valid']['name'] = $data['name'];

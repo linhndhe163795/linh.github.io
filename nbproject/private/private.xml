@@ -4,16 +4,8 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/xampp/htdocs/ProjectPHP/controllers/edit_controller.php</file>
-            <file>file:/C:/xampp/htdocs/ProjectPHP/views/pages/login.php</file>
-            <file>file:/C:/xampp/htdocs/ProjectPHP/controllers/login_controller.php</file>
-            <file>file:/C:/xampp/htdocs/ProjectPHP/views/pages/profile.php</file>
-            <file>file:/C:/xampp/htdocs/ProjectPHP/views/pages/edituser.php</file>
-            <file>file:/C:/xampp/htdocs/ProjectPHP/views/pages/search.php</file>
-            <file>file:/C:/xampp/htdocs/ProjectPHP/views/pages/homepage.php</file>
-            <file>file:/C:/xampp/htdocs/ProjectPHP/views/pages/searchuser.php</file>
-            <file>file:/C:/xampp/htdocs/ProjectPHP/views/pages/edit.php</file>
-            <file>file:/C:/xampp/htdocs/ProjectPHP/views/pages/loginuser.php</file>
-            <file>file:/C:/xampp/htdocs/ProjectPHP/views/pages/create.php</file>
+            <file>file:/C:/xampp/htdocs/ProjectPHP/helper/validation.php</file>
+            <file>file:/C:/xampp/htdocs/ProjectPHP/controllers/create_controller.php</file>
         </group>
     </open-files>
 </project-private>

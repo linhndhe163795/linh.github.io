@@ -56,7 +56,7 @@ include 'header.php';
                 foreach ($list as $row) {
                     echo '<tr>';
                     echo '<td>' . $row['id'] . '</td>';
-                    echo '<td><img alt="123" style="max-height: 100px; max-width: 100px" src="/views/pages/media/' . $row['avatar'] . '"></td>';
+                    echo '<td><img alt="image" style="max-height: 100px; max-width: 100px" src="/views/pages/media/' . $row['avatar'] . '"></td>';
                     echo '<td>' . $row['name'] . '</td>';
                     echo '<td>' . $row['email'] . '</td>';
                     if ($row['status'] == ACTIVE)

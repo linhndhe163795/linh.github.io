@@ -47,7 +47,6 @@ class EditController extends BaseController {
                     $_POST['avatar'] = $previousAvatar;
                 }
                 $validate = Validation::validateInput($_POST);
-
                 $validateImage = Validation::validateImageForEdit($_POST);
                 if ($validate['status'] && $validateImage['status']) {
                     Admin::editAdmin($_POST);
@@ -58,7 +57,8 @@ class EditController extends BaseController {
                 } else {
                     $this->render("edit", [
                         'errors' => $validate['messages'],
-                        'valid' => $validate['valid'],
+                        'valid' => isset($validate['valid']) ? $validate['valid'] : "",
+                        'errorsImage' => $validateImage['messages'],
                         'detail' => $detailUser
                     ]);
                 }
@@ -95,8 +95,7 @@ class EditController extends BaseController {
                 isset($_SESSION['role_type']) == ADMIN) {
             $detailUser = User::detailUser($_GET['id']);
             if (isset($_GET['id'])) {
-                $id = $_GET['id'];
-                $checkId = User::checkIdUser($id);
+                $checkId = User::checkIdUser($_GET['id']);
                 if (!$checkId) {
                     echo 'ID không hợp lệ';
                     header("Refresh: 3; index.php?controller=search&action=searchUser");
@@ -123,6 +122,7 @@ class EditController extends BaseController {
                 } else {
                     $_POST['avatar'] = $previousAvatar;
                 }
+
                 $validate = Validation::validateInput($_POST);
                 $validateImage = Validation::validateImageForEdit($_POST);
                 if ($validate['status'] && $validateImage['status']) {
@@ -132,10 +132,10 @@ class EditController extends BaseController {
                         'messages' => 'Edit account successfully'
                     ]);
                 } else {
-                     echo'fail';
                     $this->render("edituser", [
                         'errors' => $validate['messages'],
-                        'valid' => $validate['valid'],
+                        'valid' => isset($validate['valid']) ? $validate['valid'] : "",
+                        'errorsImage' => $validateImage['messages'],
                         'detail' => $detailUser
                     ]);
                 }
@@ -148,7 +148,7 @@ class EditController extends BaseController {
 
     public function deleteUser() {
         if (isset($_SESSION['role_type']) && ($_SESSION['role_type']) == SUPER_ADMIN ||
-                ($_SESSION['role_type']) === ADMIN) {
+                ($_SESSION['role_type']) == ADMIN) {
             if (isset($_POST['delete_account'])) {
                 $id = $_POST['delete_account'];
                 $del_flag = $_POST['del_flag'];
